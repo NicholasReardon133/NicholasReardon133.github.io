@@ -94,7 +94,7 @@ end
 
 ### image
 
-![Wooper](https://github.com/NicholasReardon133/NicholasReardon133.github.io/assets/img/woops.jpg)
+![Wooper](https://github.com/NicholasReardon133/NicholasReardon133.github.io/blob/assets/img/woops.jpg)
 
 
 ### Definition lists can be used with HTML syntax.
