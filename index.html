@@ -46,8 +46,12 @@
 
                 <div class="col-md-4">
                     <p class="lead">
-                        In this project, I created an occlusion culling script that utilized raycasting to selectively render visible objects.
-                        I created all of the building models in Blender, and then set up a testing environment in Unity.
+                        In this project, I created an occlusion culling script that utilized raycasting to selectively render visible objects. 
+                        I created all of the building models in Blender, as well as the testing environment in Unity.
+                        The first step is to set up Frustrum Culling, which involves testing if the buildings' bounding boxes are within the field of view of the camera. 
+                        After that, I cast rays from the camera to all of the remaining bounding boxes. 
+                        If all the rays cast to a given object intersected something else before reaching the target, that object would not be rendered. 
+                        See the video for a showcase of a player walking around with the script enabled.
                     </p>
                 </div>
                 <div class="col-md-8 text-center">
@@ -103,7 +107,7 @@
                         <p class="lead mb-4">
                             In this project, I implemented a mini-procedural tree modeler using L-Systems. 
                             It reads in a simple text file containing the rotation angle, iterations, axiom, and rules.
-                            Once the string is creaetd, it is translated into 2D line segments following "turtle drawing" logic to produce the geometry.
+                            Once the string is created, it is translated into 2D line segments following "turtle drawing" logic to produce the geometry.
                         </p>
                     </div>
                 </div>
@@ -117,7 +121,7 @@
                         </h2>
                         <p class="lead mb-4">
                             For this project, I first had to construct the TBN coordinate system and convert the computation of lighting from world space to tangent space. 
-                            Next, I rendered the scene from the light's persepctive to get the depth map as texture, and then added shading and shadows in their respective places. 
+                            Next, I rendered the scene from the light's persepctive to get the depth map as a texture, and then added shading and shadows in their respective places. 
                             In addition, I added diffusion into the shadows to create "soft shadows."
                         </p>
                     </div>
@@ -138,7 +142,7 @@
                         </h2>
                         <p class="lead mb-4">
                             Starting with a sphere, ground plane, sky, and light source, I implemented ray-sphere intersection and computed surface normals for the sphere and plane. 
-                            Next, I created a shading function based on the Phong model and specular reflection to result in the glossy finish.
+                            Next, I created a shading function based on the Phong model, as well as specular reflection to result in its glossy finish.
                         </p>
                     </div>
                 </div>
