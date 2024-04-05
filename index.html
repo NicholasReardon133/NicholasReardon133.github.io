@@ -49,9 +49,7 @@
                         In this project, I created an occlusion culling script that utilized raycasting to selectively render visible objects. 
                         I created all of the building models in Blender, as well as the testing environment in Unity.
                         The first step is to set up Frustrum Culling, which involves testing if the buildings' bounding boxes are within the field of view of the camera. 
-                        After that, I cast rays from the camera to all of the remaining bounding boxes. 
-                        If all the rays cast to a given object intersected something else before reaching the target, that object would not be rendered. 
-                        See the video for a showcase of a player walking around with the script enabled.
+                        After that, I cast rays from the camera to all of the remaining bounding boxes, and any object that the rays do not reach are not rendered.
                     </p>
                 </div>
                 <div class="col-md-8 text-center">
