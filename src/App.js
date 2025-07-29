@@ -4,35 +4,59 @@ import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School }
 // --- Helper Data ---
 // You can easily update your professional experience here
 const experienceData = [
-  {
-    date: "2023 - Present",
-    title: "Lead Graphics Engineer",
-    company: "Innovatech Solutions",
-    description: "Leading the development of a next-generation real-time rendering engine, focusing on performance and photorealism.",
+    {
+    date: "2024",
+    title: "Software Engineer Intern",
+    company: "Peckish AI",
+    description: "Wrote APIs and fine-tuned AI models for object detection.",
+    icon: <Briefcase size={20} className="text-white" />,
+    type: 'work'
+    },
+    {
+    date: "2024",
+    title: "Researcher",
+    company: "Purdue University",
+    description: "Documented codebase and analyzed data.",
+    icon: <Briefcase size={20} className="text-white" />,
+    type: 'work'
+    },
+    {
+    date: "2023",
+    title: "TA",
+    company: "Purdue University",
+    description: "Led coding labs and mentored college freshman.",
     icon: <Briefcase size={20} className="text-white" />,
     type: 'work'
   },
   {
-    date: "2021 - 2023",
-    title: "Software Developer",
-    company: "Creative Assembly",
-    description: "Developed and maintained gameplay systems and optimized rendering pipelines for major AAA titles.",
+    date: "2022",
+    title: "Software Engineer Intern",
+    company: "Netchex",
+    description: "Developed an automated internal communication tool.",
+    icon: <Briefcase size={20} className="text-white" />,
+    type: 'work'
+  },
+  {
+    date: "2021",
+    title: "Quality Assurance Intern",
+    company: "Netchex",
+    description: "Tested software and wrote bug reports.",
     icon: <Briefcase size={20} className="text-white" />,
     type: 'work'
   },
     {
-    date: "2021 - 2025",
-    title: "Master's in Computer Graphics",
+    date: "2025 - Present",
+    title: "Master's in Business and Technology",
     company: "Purdue University",
-    description: "Advanced studies in real-time rendering, physically-based simulation, and computational geometry.",
+    description: "",
     icon: <School size={20} className="text-white" />,
     type: 'education'
   },
   {
-    date: "2017 - 2021",
+    date: "2021 - 2025",
     title: "B.S. in Computer Science",
     company: "Purdue University",
-    description: "Specialized in computer graphics, completing advanced coursework in rendering, simulation, and animation.",
+    description: "Concentration in Computer Graphics and Visualization, Minor in Economics.\n GPA: 3.57",
     icon: <School size={20} className="text-white" />,
     type: 'education'
   }
@@ -143,7 +167,7 @@ const HomePage = () => {
                     <div className="text-center md:text-left">
                         <h1 className="text-4xl font-bold text-slate-800">Welcome to My Portfolio</h1>
                         <p className="mt-4 text-lg text-slate-600">
-                            Hi! My name is Nicholas Reardon. I've just finished up my undergraduate in Computer Science, and I'm on my way to begin my next chapter in the Masters of Business and Technology cohort this fall! Please feel free to explore my work and reach out if you are interested to connect!
+                            Hi! My name is Nicholas Reardon. I've just finished up my undergraduate in Computer Science, and I'm on my way to begin my next chapter in the Masters of Business and Technology cohort this fall! Outside of tech, I've worked as a personal fitness trainer, play golf on the weekends, and grind video games. Please feel free to explore my work and reach out if you are interested to connect!
                         </p>
                     </div>
                 </div>
