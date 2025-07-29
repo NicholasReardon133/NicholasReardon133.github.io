@@ -280,11 +280,9 @@ const SimulationPage = () => {
                 ]);
 
                 scene = new window.THREE.Scene();
-                scene.background = new window.THREE.Color(0xf0f0f0);
 
                 camera = new window.THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
-                // CHANGE: Increased Z position to zoom out
-                camera.position.set(0, 1, 10); 
+                camera.position.set(0, 1, 15); 
 
                 renderer = new window.THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
@@ -302,6 +300,12 @@ const SimulationPage = () => {
                 controls.screenSpacePanning = false;
                 controls.minDistance = 2;
                 controls.maxDistance = 50;
+
+                // --- NEW: Texture Loader for Background ---
+                const textureLoader = new window.THREE.TextureLoader();
+                textureLoader.load('/assets/img/space.jpg', (texture) => {
+                    scene.background = texture;
+                });
 
                 const loader = new window.THREE.GLTFLoader();
                 loader.load(
@@ -366,9 +370,9 @@ const SimulationPage = () => {
     return (
         <div className="animate-fade-in h-full flex flex-col">
             <div className="bg-white p-8 rounded-xl shadow-lg mb-8">
-                <h1 className="text-4xl font-bold text-slate-800 mb-2">Interactive 3D Simulation</h1>
+                <h1 className="text-4xl font-bold text-slate-800 mb-2">Interactive 3D Gateway Simulation</h1>
                 <p className="text-lg text-slate-600">
-                    This page is dedicated to an interactive 3D simulation built with three.js.
+                    This page is dedicated to an interactive 3D simulation for the Gateway Lunar Space Station built with three.js.
                     Click and drag to rotate the model.
                 </p>
             </div>
