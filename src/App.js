@@ -1,29 +1,40 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School, GraduationCap, Terminal} from 'lucide-react';
+import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School } from 'lucide-react';
 
 // --- Helper Data ---
 // You can easily update your professional experience here
 const experienceData = [
   {
-    date: "2025 - Present",
-    title: "Masters in Business and Technology",
-    company: "Purdue University",
-    description: "School Stuff.",
-    icon: <GraduationCap size={20} className="text-white" />
+    date: "2023 - Present",
+    title: "Lead Graphics Engineer",
+    company: "Innovatech Solutions",
+    description: "Leading the development of a next-generation real-time rendering engine, focusing on performance and photorealism.",
+    icon: <Briefcase size={20} className="text-white" />,
+    type: 'work'
   },
   {
-    date: "2022 - 2023",
+    date: "2021 - 2023",
     title: "Software Developer",
     company: "Creative Assembly",
     description: "Developed and maintained gameplay systems and optimized rendering pipelines for major AAA titles.",
-    icon: <Briefcase size={20} className="text-white" />
+    icon: <Briefcase size={20} className="text-white" />,
+    type: 'work'
+  },
+    {
+    date: "2021 - 2025",
+    title: "Master's in Computer Graphics",
+    company: "Purdue University",
+    description: "Advanced studies in real-time rendering, physically-based simulation, and computational geometry.",
+    icon: <School size={20} className="text-white" />,
+    type: 'education'
   },
   {
-    date: "2021 - 2025",
+    date: "2017 - 2021",
     title: "B.S. in Computer Science",
     company: "Purdue University",
     description: "Specialized in computer graphics, completing advanced coursework in rendering, simulation, and animation.",
-    icon: <School size={20} className="text-white" />
+    icon: <School size={20} className="text-white" />,
+    type: 'education'
   }
 ];
 
@@ -100,6 +111,25 @@ const Sidebar = ({ setPage, page }) => {
 };
 
 const HomePage = () => {
+    const [filter, setFilter] = useState('all');
+
+    const filteredExperience = experienceData.filter(item => {
+        if (filter === 'all') return true;
+        return item.type === filter;
+    });
+
+    const FilterButton = ({ type, label }) => (
+        <button
+            onClick={() => setFilter(type)}
+            className={`px-4 py-2 rounded-md font-semibold text-sm transition-all duration-200 ${
+                filter === type
+                ? 'bg-sky-500 text-white shadow'
+                : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
+            }`}
+        >
+            {label}
+        </button>
+    );
     return (
         <div className="animate-fade-in">
             {/* Bio Section */}
@@ -121,11 +151,21 @@ const HomePage = () => {
 
             {/* Timeline Section */}
             <div className="bg-white p-8 rounded-xl shadow-lg">
-                <h2 className="text-3xl font-bold text-slate-800 mb-8 text-center">Professional Experience</h2>
+                <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
+                    <h2 className="text-3xl font-bold text-slate-800 mb-4 sm:mb-0">My Journey</h2>
+                    <div className="flex space-x-2">
+                        <FilterButton type="all" label="All" />
+                        <FilterButton type="work" label="Work Experience" />
+                        <FilterButton type="education" label="Education" />
+                    </div>
+                </div>
+                
                 <div className="relative border-l-2 border-slate-200 ml-4">
-                    {experienceData.map((item, index) => (
-                        <div key={index} className="mb-10 ml-8">
-                            <div className="absolute -left-5 mt-1.5 w-9 h-9 bg-sky-500 rounded-full border-4 border-white flex items-center justify-center shadow">
+                    {filteredExperience.map((item, index) => (
+                        <div key={index} className="mb-10 ml-8 animate-fade-in">
+                            <div className={`absolute -left-5 mt-1.5 w-9 h-9 rounded-full border-4 border-white flex items-center justify-center shadow ${
+                                item.type === 'work' ? 'bg-sky-500' : 'bg-emerald-500'
+                            }`}>
                                 {item.icon}
                             </div>
                             <time className="mb-1 text-sm font-normal leading-none text-slate-500">{item.date}</time>
