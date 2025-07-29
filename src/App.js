@@ -1,25 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School } from 'lucide-react';
+import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School, GraduationCap, Terminal} from 'lucide-react';
 
 // --- Helper Data ---
 // You can easily update your professional experience here
 const experienceData = [
   {
-    date: "Aug 2025 - Present",
+    date: "2025 - Present",
     title: "Masters in Business and Technology",
     company: "Purdue University",
     description: "School Stuff.",
-    icon: <Briefcase size={20} className="text-white" />
+    icon: <GraduationCap size={20} className="text-white" />
   },
   {
-    date: "2021 - 2023",
+    date: "2022 - 2023",
     title: "Software Developer",
     company: "Creative Assembly",
     description: "Developed and maintained gameplay systems and optimized rendering pipelines for major AAA titles.",
     icon: <Briefcase size={20} className="text-white" />
   },
   {
-    date: "2017 - 2021",
+    date: "2021 - 2025",
     title: "B.S. in Computer Science",
     company: "Purdue University",
     description: "Specialized in computer graphics, completing advanced coursework in rendering, simulation, and animation.",
@@ -113,7 +113,7 @@ const HomePage = () => {
                     <div className="text-center md:text-left">
                         <h1 className="text-4xl font-bold text-slate-800">Welcome to My Portfolio</h1>
                         <p className="mt-4 text-lg text-slate-600">
-                            My name is Nicholas Reardon. I have been developing software projects for the past few years, and I have a passion for 3D Computer Graphics. I find that when the artistry of 3D modeling and animation is combined with the technical finesse of physics and linear algebra, you can create something truly breathtaking. Please feel free to explore my work.
+                            Hi! My name is Nicholas Reardon. I've just finished up my undergraduate in Computer Science, and I'm on my way to begin my next chapter in the Masters of Business and Technology cohort this fall! I am a huge fan of 3D Computer Graphics, and I find that when the artistry of 3D modeling and animation is combined with the technical finesse of physics and linear algebra, you can create something truly breathtaking. Please feel free to explore my work and reach out if you are interested to connect!
                         </p>
                     </div>
                 </div>
@@ -288,13 +288,13 @@ const Footer = () => {
             <div className="flex flex-col md:flex-row justify-between items-center">
                 <h3 className="text-xl font-bold text-slate-800 mb-4 md:mb-0">Get in Touch</h3>
                 <div className="flex space-x-6">
-                    <a href="mailto:your-email@example.com" className="text-slate-600 hover:text-sky-500 transition-colors">
+                    <a href="mailto:nicholas@reardonusa.com" className="text-slate-600 hover:text-sky-500 transition-colors">
                         <Mail size={28} />
                     </a>
-                    <a href="https://linkedin.com/in/your-profile" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-sky-500 transition-colors">
+                    <a href="https://www.linkedin.com/in/nicholas-reardon-ab9bba241/" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-sky-500 transition-colors">
                         <Linkedin size={28} />
                     </a>
-                    <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-sky-500 transition-colors">
+                    <a href="https://github.com/NicholasReardon133" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-sky-500 transition-colors">
                         <Github size={28} />
                     </a>
                 </div>
