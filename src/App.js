@@ -253,7 +253,6 @@ const EducationPage = () => {
 
 const SimulationPage = () => {
     const mountRef = useRef(null);
-    // NEW: State to manage loading indicator
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -316,13 +315,11 @@ const SimulationPage = () => {
                         const center = box.getCenter(new window.THREE.Vector3());
                         model.position.sub(center);
                         scene.add(model);
-                        // NEW: Turn off loading indicator on success
                         setIsLoading(false);
                     },
                     undefined,
                     (error) => {
                         console.error('An error happened while loading the model:', error);
-                        // NEW: Turn off loading indicator on error
                         setIsLoading(false);
                     }
                 );
@@ -376,18 +373,15 @@ const SimulationPage = () => {
                     Click and drag to rotate the model.
                 </p>
             </div>
-            {/* CHANGE: Added 'relative' positioning to this container */}
-            <div ref={mountRef} className="relative w-full flex-grow bg-slate-200 rounded-xl shadow-inner" style={{minHeight: '60vh'}}>
-                {/* NEW: Loading indicator overlay */}
+            <div ref={mountRef} className="relative w-full flex-grow bg-slate-900 rounded-xl shadow-inner" style={{minHeight: '60vh'}}>
                 {isLoading && (
-                    <div className="absolute inset-0 flex justify-center items-center bg-slate-200 bg-opacity-80 z-10">
+                    <div className="absolute inset-0 flex justify-center items-center bg-slate-900 z-10">
                         <div className="text-center">
                             <div className="w-12 h-12 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                            <p className="mt-4 text-slate-700 font-semibold">Loading Model...</p>
+                            <p className="mt-4 text-white font-semibold">Loading Model...</p>
                         </div>
                     </div>
                 )}
-                {/* three.js canvas will be mounted behind the overlay */}
             </div>
         </div>
     );
