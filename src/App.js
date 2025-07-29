@@ -5,7 +5,7 @@ import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School }
 // You can easily update your professional experience here
 const experienceData = [
     {
-    date: "2024",
+    date: "Summer 2024",
     title: "Software Engineer Intern",
     company: "Peckish AI",
     description: "Wrote APIs and fine-tuned AI models for object detection.",
@@ -13,7 +13,7 @@ const experienceData = [
     type: 'work'
     },
     {
-    date: "2024",
+    date: "Spring 2024",
     title: "Researcher",
     company: "Purdue University",
     description: "Documented codebase and analyzed data.",
@@ -21,15 +21,15 @@ const experienceData = [
     type: 'work'
     },
     {
-    date: "2023",
-    title: "TA",
+    date: "Fall 2023",
+    title: "Teaching Assistant",
     company: "Purdue University",
     description: "Led coding labs and mentored college freshman.",
     icon: <Briefcase size={20} className="text-white" />,
     type: 'work'
   },
   {
-    date: "2022",
+    date: "Summer 2022",
     title: "Software Engineer Intern",
     company: "Netchex",
     description: "Developed an automated internal communication tool.",
@@ -37,7 +37,7 @@ const experienceData = [
     type: 'work'
   },
   {
-    date: "2021",
+    date: "Summer 2021",
     title: "Quality Assurance Intern",
     company: "Netchex",
     description: "Tested software and wrote bug reports.",
@@ -56,44 +56,44 @@ const experienceData = [
     date: "2021 - 2025",
     title: "B.S. in Computer Science",
     company: "Purdue University",
-    description: "Concentration in Computer Graphics and Visualization, Minor in Economics.\n GPA: 3.57",
+    description: "Concentration in Computer Graphics and Visualization, Minor in Economics. <br /> GPA: 3.57",
     icon: <School size={20} className="text-white" />,
     type: 'education'
   }
 ];
 
 // You can update your project data here
-const projectData = [
+const schoolProjects = [
     {
         title: "Unity Occlusion Culling",
         description: "In this project, I created an occlusion culling script that utilized raycasting to selectively render visible objects. I created all of the building models in Blender, as well as the testing environment in Unity. The first step is to set up Frustrum Culling, which involves testing if the buildings' bounding boxes are within the field of view of the camera. After that, I cast rays from the camera to all of the remaining bounding boxes, and any object that the rays do not reach are not rendered.",
         mediaType: 'video',
         mediaSrc: 'https://www.youtube.com/embed/8F179_CA1AI',
         images: [
-            "https://placehold.co/400x300/1e293b/ffffff?text=Building+1",
-            "https://placehold.co/400x300/1e293b/ffffff?text=Building+2",
-            "https://placehold.co/400x300/1e293b/ffffff?text=Building+3"
+            "/assets/img/build1.PNG",
+            "/assets/img/build2.PNG",
+            "/assets/img/build3.PNG"
         ]
     },
     {
         title: "Procedural Modeling & L-Systems",
         description: "In this project, I implemented a mini-procedural tree modeler using L-Systems. It reads in a simple text file containing the rotation angle, iterations, axiom, and rules. Once the string is created, it is translated into 2D line segments following 'turtle drawing' logic to produce the geometry.",
         mediaType: 'image',
-        mediaSrc: 'https://placehold.co/600x450/1e293b/ffffff?text=L-System+GIF',
+        mediaSrc: '/assets/img/proced.PNG',
         images: []
     },
     {
         title: "Texture, Bump, and Shadow Mapping",
         description: "For this project, I first had to construct the TBN coordinate system and convert the computation of lighting from world space to tangent space. Next, I rendered the scene from the light's persepctive to get the depth map as a texture, and then added shading and shadows in their respective places. In addition, I added diffusion into the shadows to create 'soft shadows.'",
         mediaType: 'image',
-        mediaSrc: 'https://placehold.co/600x450/1e293b/ffffff?text=Shadow+Map+GIF',
+        mediaSrc: '/assets/img/shadow.PNG',
         images: []
     },
     {
         title: "Ray Tracing & Phong Shading",
         description: "Starting with a sphere, ground plane, sky, and light source, I implemented ray-sphere intersection and computed surface normals for the sphere and plane. Next, I created a shading function based on the Phong model, as well as specular reflection to result in its glossy finish.",
         mediaType: 'image',
-        mediaSrc: 'https://placehold.co/600x450/1e293b/ffffff?text=Ray+Tracing+GIF',
+        mediaSrc: '/assets/img/phong.PNG',
         images: []
     }
 ];
@@ -124,7 +124,7 @@ const Sidebar = ({ setPage, page }) => {
             </div>
             <nav>
                 <NavItem icon={<Home size={20} />} label="Home" pageName="home" />
-                <NavItem icon={<BookOpen size={20} />} label="Education" pageName="education" />
+                <NavItem icon={<BookOpen size={20} />} label="School Projects" pageName="education" />
                 <NavItem icon={<Code size={20} />} label="Simulation" pageName="simulation" />
             </nav>
             <div className="mt-auto text-center text-slate-500 text-xs">
@@ -212,13 +212,13 @@ const HomePage = () => {
 const EducationPage = () => {
     return (
         <div className="animate-fade-in">
-            <h1 className="text-4xl font-bold text-slate-800 mb-2 text-center">University & Personal Projects</h1>
+            <h1 className="text-4xl font-bold text-slate-800 mb-2 text-center">University Projects</h1>
             <p className="text-lg text-slate-600 mb-8 text-center">
-                Each of the following are computer graphics assignments and personal projects I have worked on.
+                Each of the following are computer graphics assignments I have worked on.
             </p>
             
             <div className="space-y-12">
-                {projectData.map((project, index) => (
+                {schoolProjects.map((project, index) => (
                     <div key={index} className="bg-white p-8 rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row items-center gap-8">
                         {/* Media Content */}
                         <div className="w-full lg:w-1/2">
