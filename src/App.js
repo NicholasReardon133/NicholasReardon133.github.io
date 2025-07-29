@@ -5,10 +5,10 @@ import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School }
 // You can easily update your professional experience here
 const experienceData = [
   {
-    date: "2023 - Present",
-    title: "Lead Graphics Engineer",
-    company: "Innovatech Solutions",
-    description: "Leading the development of a next-generation real-time rendering engine, focusing on performance and photorealism.",
+    date: "Aug 2025 - Present",
+    title: "Masters in Business and Technology",
+    company: "Purdue University",
+    description: "School Stuff.",
     icon: <Briefcase size={20} className="text-white" />
   },
   {
