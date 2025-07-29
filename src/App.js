@@ -70,8 +70,8 @@ const schoolProjects = [
         mediaType: 'video',
         mediaSrc: 'https://www.youtube.com/embed/8F179_CA1AI',
         images: [
-            "/assets/img/build3.PNG",
             "/assets/img/build2.PNG",
+            "/assets/img/build3.PNG",
             "/assets/img/build1.PNG"
         ]
     },
@@ -255,82 +255,114 @@ const SimulationPage = () => {
     const mountRef = useRef(null);
 
     useEffect(() => {
-        // Dynamically load the three.js script
-        const script = document.createElement('script');
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-        script.async = true;
-        document.body.appendChild(script);
+        // References to the scene elements
+        let renderer, scene, camera, controls, animateId;
+        
+        // Helper to load scripts dynamically
+        const loadScript = (src) => {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+                script.onload = resolve;
+                script.onerror = reject;
+                script.id = src; // Give script an ID for easy removal
+                document.body.appendChild(script);
+            });
+        };
 
-        script.onload = () => {
-            // three.js is loaded, you can now initialize your scene
-            // Make sure the window.THREE object is available
-            if (window.THREE) {
-                initThreeJsScene();
+        const initThreeJsScene = async () => {
+            try {
+                // Load Three.js first, then loaders
+                await loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js");
+                await Promise.all([
+                    loadScript("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"),
+                    loadScript("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js")
+                ]);
+
+                // --- Scene Setup ---
+                scene = new window.THREE.Scene();
+                scene.background = new window.THREE.Color(0xf0f0f0); // Blank, light gray background
+
+                camera = new window.THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
+                camera.position.set(0, 2, 5); // Adjust camera position for a good view
+
+                renderer = new window.THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+                mountRef.current.appendChild(renderer.domElement);
+
+                // --- Lighting ---
+                const ambientLight = new window.THREE.AmbientLight(0xffffff, 0.8);
+                scene.add(ambientLight);
+                const directionalLight = new window.THREE.DirectionalLight(0xffffff, 1);
+                directionalLight.position.set(5, 10, 7.5);
+                scene.add(directionalLight);
+
+                // --- Controls ---
+                controls = new window.THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true; // Smooths out camera movement
+                controls.dampingFactor = 0.05;
+                controls.screenSpacePanning = false;
+                controls.minDistance = 2;
+                controls.maxDistance = 50;
+
+                // --- GLTF Loader ---
+                const loader = new window.THREE.GLTFLoader();
+                loader.load(
+                    '/assets/models/gateway.glb', // Path to your model in the public folder
+                    (gltf) => {
+                        const model = gltf.scene;
+                        // Optional: Center the model and scale it if needed
+                        const box = new window.THREE.Box3().setFromObject(model);
+                        const center = box.getCenter(new window.THREE.Vector3());
+                        model.position.sub(center); // Center the model
+                        scene.add(model);
+                    },
+                    undefined, // onProgress callback not needed here
+                    (error) => {
+                        console.error('An error happened while loading the model:', error);
+                    }
+                );
+
+                // --- Animation Loop ---
+                const animate = function () {
+                    animateId = requestAnimationFrame(animate);
+                    controls.update(); // Required for damping
+                    renderer.render(scene, camera);
+                };
+                animate();
+
+            } catch (error) {
+                console.error("Failed to load three.js scripts:", error);
             }
         };
 
-        const initThreeJsScene = () => {
-            // --- Your three.js code will go here ---
-            // Example:
-            const scene = new window.THREE.Scene();
-            scene.background = new window.THREE.Color(0x1e293b);
+        initThreeJsScene();
 
-            const camera = new window.THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
-            const renderer = new window.THREE.WebGLRenderer({ antialias: true });
-            
-            renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
-            mountRef.current.appendChild(renderer.domElement);
-
-            const geometry = new window.THREE.BoxGeometry();
-            const material = new window.THREE.MeshStandardMaterial({ color: 0x0ea5e9 });
-            const cube = new window.THREE.Mesh(geometry, material);
-            scene.add(cube);
-            
-            const light = new window.THREE.PointLight(0xffffff, 1, 100);
-            light.position.set(5, 5, 5);
-            scene.add(light);
-            
-            const ambientLight = new window.THREE.AmbientLight(0xffffff, 0.2);
-            scene.add(ambientLight);
-
-            camera.position.z = 5;
-
-            const animate = function () {
-                requestAnimationFrame(animate);
-                cube.rotation.x += 0.01;
-                cube.rotation.y += 0.01;
-                renderer.render(scene, camera);
-            };
-
-            animate();
-
-            // Handle window resize
-            const handleResize = () => {
-                if (mountRef.current) {
-                    const width = mountRef.current.clientWidth;
-                    const height = mountRef.current.clientHeight;
-                    camera.aspect = width / height;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(width, height);
-                }
-            };
-            
-            window.addEventListener('resize', handleResize);
-            
-            // Cleanup on component unmount
-            return () => {
-                window.removeEventListener('resize', handleResize);
-                if (mountRef.current) {
-                    mountRef.current.removeChild(renderer.domElement);
-                }
-                document.body.removeChild(script);
-            };
-        }
+        const handleResize = () => {
+            if (mountRef.current && renderer) {
+                const width = mountRef.current.clientWidth;
+                const height = mountRef.current.clientHeight;
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            }
+        };
         
-        // Initial call in case script is already cached and loads instantly
-        if (window.THREE) {
-            initThreeJsScene();
-        }
+        window.addEventListener('resize', handleResize);
+
+        // --- Cleanup ---
+        return () => {
+            cancelAnimationFrame(animateId);
+            window.removeEventListener('resize', handleResize);
+            if (mountRef.current && renderer && renderer.domElement) {
+                mountRef.current.removeChild(renderer.domElement);
+            }
+            // Remove dynamically added scripts
+            document.getElementById("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js")?.remove();
+            document.getElementById("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js")?.remove();
+            document.getElementById("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js")?.remove();
+        };
 
     }, []);
 
@@ -340,10 +372,10 @@ const SimulationPage = () => {
                 <h1 className="text-4xl font-bold text-slate-800 mb-2">Interactive 3D Simulation</h1>
                 <p className="text-lg text-slate-600">
                     This page is dedicated to an interactive 3D simulation built with three.js.
-                    Feel free to interact with the scene below.
+                    Click and drag to rotate the model.
                 </p>
             </div>
-            <div ref={mountRef} className="w-full flex-grow bg-slate-900 rounded-xl shadow-inner" style={{minHeight: '60vh'}}>
+            <div ref={mountRef} className="w-full flex-grow bg-slate-200 rounded-xl shadow-inner" style={{minHeight: '60vh'}}>
                 {/* three.js canvas will be mounted here */}
             </div>
         </div>
