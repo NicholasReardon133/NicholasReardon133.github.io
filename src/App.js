@@ -302,7 +302,7 @@ const SimulationPage = () => {
 
                 // --- NEW: Texture Loader for Background ---
                 const textureLoader = new window.THREE.TextureLoader();
-                textureLoader.load('/assets/img/space.jpg', (texture) => {
+                textureLoader.load('/assets/img/moon.jpg', (texture) => {
                     scene.background = texture;
                 });
 
