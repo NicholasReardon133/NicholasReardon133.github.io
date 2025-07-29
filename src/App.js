@@ -253,12 +253,12 @@ const EducationPage = () => {
 
 const SimulationPage = () => {
     const mountRef = useRef(null);
+    // NEW: State to manage loading indicator
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // References to the scene elements
         let renderer, scene, camera, controls, animateId;
         
-        // Helper to load scripts dynamically
         const loadScript = (src) => {
             return new Promise((resolve, reject) => {
                 const script = document.createElement('script');
@@ -266,74 +266,73 @@ const SimulationPage = () => {
                 script.async = true;
                 script.onload = resolve;
                 script.onerror = reject;
-                script.id = src; // Give script an ID for easy removal
+                script.id = src;
                 document.body.appendChild(script);
             });
         };
 
         const initThreeJsScene = async () => {
             try {
-                // Load Three.js first, then loaders
                 await loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js");
                 await Promise.all([
                     loadScript("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"),
                     loadScript("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js")
                 ]);
 
-                // --- Scene Setup ---
                 scene = new window.THREE.Scene();
-                scene.background = new window.THREE.Color(0xf0f0f0); // Blank, light gray background
+                scene.background = new window.THREE.Color(0xf0f0f0);
 
                 camera = new window.THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
-                camera.position.set(0, 2, 5); // Adjust camera position for a good view
+                // CHANGE: Increased Z position to zoom out
+                camera.position.set(0, 1, 10); 
 
                 renderer = new window.THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
                 mountRef.current.appendChild(renderer.domElement);
 
-                // --- Lighting ---
                 const ambientLight = new window.THREE.AmbientLight(0xffffff, 0.8);
                 scene.add(ambientLight);
                 const directionalLight = new window.THREE.DirectionalLight(0xffffff, 1);
                 directionalLight.position.set(5, 10, 7.5);
                 scene.add(directionalLight);
 
-                // --- Controls ---
                 controls = new window.THREE.OrbitControls(camera, renderer.domElement);
-                controls.enableDamping = true; // Smooths out camera movement
+                controls.enableDamping = true;
                 controls.dampingFactor = 0.05;
                 controls.screenSpacePanning = false;
                 controls.minDistance = 2;
                 controls.maxDistance = 50;
 
-                // --- GLTF Loader ---
                 const loader = new window.THREE.GLTFLoader();
                 loader.load(
-                    '/assets/models/gateway.glb', // Path to your model in the public folder
+                    '/assets/models/gateway.glb',
                     (gltf) => {
                         const model = gltf.scene;
-                        // Optional: Center the model and scale it if needed
                         const box = new window.THREE.Box3().setFromObject(model);
                         const center = box.getCenter(new window.THREE.Vector3());
-                        model.position.sub(center); // Center the model
+                        model.position.sub(center);
                         scene.add(model);
+                        // NEW: Turn off loading indicator on success
+                        setIsLoading(false);
                     },
-                    undefined, // onProgress callback not needed here
+                    undefined,
                     (error) => {
                         console.error('An error happened while loading the model:', error);
+                        // NEW: Turn off loading indicator on error
+                        setIsLoading(false);
                     }
                 );
 
-                // --- Animation Loop ---
                 const animate = function () {
                     animateId = requestAnimationFrame(animate);
-                    controls.update(); // Required for damping
+                    controls.update();
                     renderer.render(scene, camera);
                 };
                 animate();
 
             } catch (error) {
                 console.error("Failed to load three.js scripts:", error);
+                setIsLoading(false);
             }
         };
 
@@ -351,14 +350,12 @@ const SimulationPage = () => {
         
         window.addEventListener('resize', handleResize);
 
-        // --- Cleanup ---
         return () => {
             cancelAnimationFrame(animateId);
             window.removeEventListener('resize', handleResize);
             if (mountRef.current && renderer && renderer.domElement) {
                 mountRef.current.removeChild(renderer.domElement);
             }
-            // Remove dynamically added scripts
             document.getElementById("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js")?.remove();
             document.getElementById("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js")?.remove();
             document.getElementById("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js")?.remove();
@@ -375,8 +372,18 @@ const SimulationPage = () => {
                     Click and drag to rotate the model.
                 </p>
             </div>
-            <div ref={mountRef} className="w-full flex-grow bg-slate-200 rounded-xl shadow-inner" style={{minHeight: '60vh'}}>
-                {/* three.js canvas will be mounted here */}
+            {/* CHANGE: Added 'relative' positioning to this container */}
+            <div ref={mountRef} className="relative w-full flex-grow bg-slate-200 rounded-xl shadow-inner" style={{minHeight: '60vh'}}>
+                {/* NEW: Loading indicator overlay */}
+                {isLoading && (
+                    <div className="absolute inset-0 flex justify-center items-center bg-slate-200 bg-opacity-80 z-10">
+                        <div className="text-center">
+                            <div className="w-12 h-12 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                            <p className="mt-4 text-slate-700 font-semibold">Loading Model...</p>
+                        </div>
+                    </div>
+                )}
+                {/* three.js canvas will be mounted behind the overlay */}
             </div>
         </div>
     );
