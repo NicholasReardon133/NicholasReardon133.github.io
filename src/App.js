@@ -14,7 +14,7 @@ const experienceData = [
     },
     {
     date: "Spring 2024",
-    title: "Researcher",
+    title: "Undergraduate Researcher",
     company: "Purdue University",
     description: "Documented codebase and analyzed data.",
     icon: <Briefcase size={20} className="text-white" />,
@@ -70,8 +70,9 @@ const schoolProjects = [
         mediaType: 'video',
         mediaSrc: 'https://www.youtube.com/embed/8F179_CA1AI',
         images: [
-            "/assets/img/build1.PNG",
-            "/assets/img/build3.PNG"
+            "/assets/img/build3.PNG",
+            "/assets/img/build2.PNG",
+            "/assets/img/build1.PNG"
         ]
     },
     {
@@ -231,7 +232,7 @@ const EducationPage = () => {
                             {project.images && project.images.length > 0 && (
                                 <div className="grid grid-cols-3 gap-4 mt-4">
                                     {project.images.map((img, i) => (
-                                        <img key={i} src={img} alt={`${project.title} screenshot ${i+1}`} className="rounded-md shadow-sm" />
+                                        <img key={i} src={img} alt={`${project.title} screenshot ${i+1}`} className="object-contain rounded-md shadow-sm" />
                                     ))}
                                 </div>
                             )}
