@@ -71,7 +71,6 @@ const schoolProjects = [
         mediaSrc: 'https://www.youtube.com/embed/8F179_CA1AI',
         images: [
             "/assets/img/build1.PNG",
-            "/assets/img/build2.PNG",
             "/assets/img/build3.PNG"
         ]
     },
@@ -79,21 +78,21 @@ const schoolProjects = [
         title: "Procedural Modeling & L-Systems",
         description: "In this project, I implemented a mini-procedural tree modeler using L-Systems. It reads in a simple text file containing the rotation angle, iterations, axiom, and rules. Once the string is created, it is translated into 2D line segments following 'turtle drawing' logic to produce the geometry.",
         mediaType: 'image',
-        mediaSrc: '/assets/img/proced.PNG',
+        mediaSrc: '/assets/img/proced.gif',
         images: []
     },
     {
         title: "Texture, Bump, and Shadow Mapping",
         description: "For this project, I first had to construct the TBN coordinate system and convert the computation of lighting from world space to tangent space. Next, I rendered the scene from the light's persepctive to get the depth map as a texture, and then added shading and shadows in their respective places. In addition, I added diffusion into the shadows to create 'soft shadows.'",
         mediaType: 'image',
-        mediaSrc: '/assets/img/shadow.PNG',
+        mediaSrc: '/assets/img/shadow.gif',
         images: []
     },
     {
         title: "Ray Tracing & Phong Shading",
         description: "Starting with a sphere, ground plane, sky, and light source, I implemented ray-sphere intersection and computed surface normals for the sphere and plane. Next, I created a shading function based on the Phong model, as well as specular reflection to result in its glossy finish.",
         mediaType: 'image',
-        mediaSrc: '/assets/img/phong.PNG',
+        mediaSrc: '/assets/img/phong.gif',
         images: []
     }
 ];
@@ -160,9 +159,9 @@ const HomePage = () => {
             <div className="bg-white p-8 rounded-xl shadow-lg mb-8">
                 <div className="flex flex-col md:flex-row items-center">
                     <img 
-                        src="https://placehold.co/150x150/1e293b/ffffff?text=NR" 
+                        src="/assets/img/prof.jpg" 
                         alt="Nicholas Reardon" 
-                        className="w-36 h-36 rounded-full mr-0 md:mr-8 mb-6 md:mb-0 border-4 border-slate-200 shadow-md"
+                        className="w-52 h-52 rounded-full mr-0 md:mr-8 mb-6 md:mb-0 border-4 border-slate-200 shadow-md"
                     />
                     <div className="text-center md:text-left">
                         <h1 className="text-4xl font-bold text-slate-800">Welcome to My Portfolio</h1>
