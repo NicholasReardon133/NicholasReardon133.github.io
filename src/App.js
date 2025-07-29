@@ -143,7 +143,7 @@ const HomePage = () => {
                     <div className="text-center md:text-left">
                         <h1 className="text-4xl font-bold text-slate-800">Welcome to My Portfolio</h1>
                         <p className="mt-4 text-lg text-slate-600">
-                            Hi! My name is Nicholas Reardon. I've just finished up my undergraduate in Computer Science, and I'm on my way to begin my next chapter in the Masters of Business and Technology cohort this fall! I am a huge fan of 3D Computer Graphics, and I find that when the artistry of 3D modeling and animation is combined with the technical finesse of physics and linear algebra, you can create something truly breathtaking. Please feel free to explore my work and reach out if you are interested to connect!
+                            Hi! My name is Nicholas Reardon. I've just finished up my undergraduate in Computer Science, and I'm on my way to begin my next chapter in the Masters of Business and Technology cohort this fall! Please feel free to explore my work and reach out if you are interested to connect!
                         </p>
                     </div>
                 </div>
@@ -162,16 +162,21 @@ const HomePage = () => {
                 
                 <div className="relative border-l-2 border-slate-200 ml-4">
                     {filteredExperience.map((item, index) => (
-                        <div key={index} className="mb-10 ml-8 animate-fade-in">
+                        // FIX: Removed margin from this parent div and added a new div for text content.
+                        <div key={index} className="mb-10 animate-fade-in">
+                            {/* Icon remains positioned relative to the timeline bar */}
                             <div className={`absolute -left-5 mt-1.5 w-9 h-9 rounded-full border-4 border-white flex items-center justify-center shadow ${
                                 item.type === 'work' ? 'bg-sky-500' : 'bg-emerald-500'
                             }`}>
                                 {item.icon}
                             </div>
-                            <time className="mb-1 text-sm font-normal leading-none text-slate-500">{item.date}</time>
-                            <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
-                            <h4 className="text-md font-medium text-slate-700">{item.company}</h4>
-                            <p className="mt-2 text-base font-normal text-slate-600">{item.description}</p>
+                            {/* NEW DIV: This div wraps the text and applies the margin, pushing only the text to the right. */}
+                            <div className="ml-10">
+                                <time className="mb-1 text-sm font-normal leading-none text-slate-500">{item.date}</time>
+                                <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
+                                <h4 className="text-md font-medium text-slate-700">{item.company}</h4>
+                                <p className="mt-2 text-base font-normal text-slate-600">{item.description}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
