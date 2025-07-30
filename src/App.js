@@ -253,17 +253,45 @@ const EducationPage = () => {
 
 const SimulationPage = () => {
     const mountRef = useRef(null);
+    const sceneRef = useRef(null); // Ref to hold the scene object
     const [isLoading, setIsLoading] = useState(true);
-    // NEW: State for camera position display
     const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 0, z: 0 });
-    // NEW: State for the interaction hint
     const [showDragHint, setShowDragHint] = useState(false);
+    // NEW: State for the background
+    const [background, setBackground] = useState('/assets/img/moon.jpg');
+
+    // NEW: Handle background change from dropdown
+    const handleBackgroundChange = (e) => {
+        setBackground(e.target.value);
+    };
+
+    // This effect handles updating the background when the state changes
+    useEffect(() => {
+        if (sceneRef.current && window.THREE) {
+            const scene = sceneRef.current;
+            const value = background;
+
+            if (value.startsWith('/assets')) { // It's an image
+                const textureLoader = new window.THREE.TextureLoader();
+                textureLoader.load(value, (texture) => {
+                    scene.background = texture;
+                });
+            } else { // It's a color
+                scene.background = new window.THREE.Color(value);
+            }
+        }
+    }, [background]);
+
 
     useEffect(() => {
-        let renderer, scene, camera, controls, animateId;
+        let renderer, camera, controls, animateId;
         
         const loadScript = (src) => {
             return new Promise((resolve, reject) => {
+                if (document.getElementById(src)) {
+                    resolve();
+                    return;
+                }
                 const script = document.createElement('script');
                 script.src = src;
                 script.async = true;
@@ -282,11 +310,18 @@ const SimulationPage = () => {
                     loadScript("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js")
                 ]);
 
-                scene = new window.THREE.Scene();
+                sceneRef.current = new window.THREE.Scene();
+                const scene = sceneRef.current;
+                
+                // Set initial background
+                const textureLoader = new window.THREE.TextureLoader();
+                textureLoader.load(background, (texture) => {
+                    scene.background = texture;
+                });
 
                 camera = new window.THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
                 camera.position.set(0, 1, 15); 
-                setCameraPosition({ x: 0, y: 1, z: 15 }); // Initialize position display
+                setCameraPosition({ x: 0, y: 1, z: 15 });
 
                 renderer = new window.THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
@@ -305,17 +340,11 @@ const SimulationPage = () => {
                 controls.minDistance = 2;
                 controls.maxDistance = 50;
 
-                // NEW: Event listener to hide hint on first interaction
                 const hideHintOnFirstInteraction = () => {
                     setShowDragHint(false);
                     controls.removeEventListener('start', hideHintOnFirstInteraction);
                 };
                 controls.addEventListener('start', hideHintOnFirstInteraction);
-
-                const textureLoader = new window.THREE.TextureLoader();
-                textureLoader.load('/assets/img/space.jpg', (texture) => {
-                    scene.background = texture;
-                });
 
                 const loader = new window.THREE.GLTFLoader();
                 loader.load(
@@ -327,7 +356,6 @@ const SimulationPage = () => {
                         model.position.sub(center);
                         scene.add(model);
                         setIsLoading(false);
-                        // NEW: Show the hint after loading is complete
                         setShowDragHint(true);
                     },
                     undefined,
@@ -341,7 +369,6 @@ const SimulationPage = () => {
                     animateId = requestAnimationFrame(animate);
                     controls.update();
                     
-                    // NEW: Update camera position display, rounded to 2 decimal places
                     setCameraPosition(prevPos => {
                         const newX = parseFloat(camera.position.x.toFixed(2));
                         const newY = parseFloat(camera.position.y.toFixed(2));
@@ -379,9 +406,7 @@ const SimulationPage = () => {
         return () => {
             cancelAnimationFrame(animateId);
             window.removeEventListener('resize', handleResize);
-            if (controls) {
-                controls.dispose();
-            }
+            if (controls) controls.dispose();
             if (mountRef.current && renderer && renderer.domElement) {
                 mountRef.current.removeChild(renderer.domElement);
             }
@@ -390,16 +415,35 @@ const SimulationPage = () => {
             document.getElementById("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js")?.remove();
         };
 
-    }, []);
+    }, []); // Main effect runs only once on mount
 
     return (
         <div className="animate-fade-in h-full flex flex-col">
             <div className="bg-white p-8 rounded-xl shadow-lg mb-8">
-                <h1 className="text-4xl font-bold text-slate-800 mb-2">Interactive 3D Simulation</h1>
-                <p className="text-lg text-slate-600">
-                    This page is dedicated to an interactive 3D simulation built with three.js.
-                    Click and drag to rotate the model.
-                </p>
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+                     <div>
+                        <h1 className="text-4xl font-bold text-slate-800 mb-2">Interactive 3D Simulation</h1>
+                        <p className="text-lg text-slate-600">
+                            Click and drag to rotate the model, or use the dropdown to change the scene.
+                        </p>
+                    </div>
+                    {/* NEW: Background Selector Dropdown */}
+                    <div className="flex-shrink-0">
+                        <label htmlFor="bg-select" className="block text-sm font-medium text-slate-700 mb-1">Background</label>
+                        <select
+                            id="bg-select"
+                            value={background}
+                            onChange={handleBackgroundChange}
+                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md shadow-sm"
+                        >
+                            <option value="/assets/img/moon.jpg">Moon</option>
+                            <option value="/assets/img/space.jpg">Space</option>
+                            <option value="/assets/img/blue.jpg">Blue</option>
+                            <option value="#ffffff">White</option>
+                            <option value="#000000">Black</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div ref={mountRef} className="relative w-full flex-grow bg-slate-900 rounded-xl shadow-inner" style={{minHeight: '60vh'}}>
                 {isLoading && (
@@ -410,7 +454,6 @@ const SimulationPage = () => {
                         </div>
                     </div>
                 )}
-                {/* NEW: Drag hint overlay */}
                 {showDragHint && (
                     <div className="absolute inset-0 flex justify-center items-center z-10 pointer-events-none transition-opacity duration-500">
                         <div className="bg-black bg-opacity-60 text-white font-semibold px-4 py-2 rounded-lg animate-pulse">
@@ -418,7 +461,6 @@ const SimulationPage = () => {
                         </div>
                     </div>
                 )}
-                {/* NEW: Camera data display */}
                 <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-gray-300 text-xs font-mono p-2 rounded-md pointer-events-none">
                     <p>Camera Position:</p>
                     <p>X: {cameraPosition.x}</p>
