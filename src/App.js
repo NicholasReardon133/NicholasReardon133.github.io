@@ -101,23 +101,40 @@ const schoolProjects = [
 
 // --- Components ---
 
-const Sidebar = ({ setPage, page }) => {
+// CHANGE: Renamed Sidebar to Navigation for clarity
+const Navigation = ({ setPage, page, isMobile }) => {
     const NavItem = ({ icon, label, pageName }) => (
         <button
             onClick={() => setPage(pageName)}
-            className={`flex items-center w-full text-left px-4 py-3 my-1 rounded-lg transition-all duration-200 ${
+            // CHANGE: Styling adjusted for both mobile and desktop
+            className={`flex items-center justify-center lg:justify-start w-full text-left px-4 py-3 my-1 rounded-lg transition-all duration-200 ${
                 page === pageName 
                 ? 'bg-sky-500 text-white shadow-lg' 
                 : 'text-gray-300 hover:bg-slate-700 hover:text-white'
             }`}
         >
             {icon}
-            <span className="ml-4 font-semibold">{label}</span>
+            {/* CHANGE: Text label is hidden on mobile screens */}
+            <span className="ml-4 font-semibold hidden lg:block">{label}</span>
         </button>
     );
 
+    // Mobile View: Top Bar
+    if (isMobile) {
+        return (
+            <header className="bg-slate-800 text-white w-full p-2 flex justify-center fixed top-0 left-0 z-30 shadow-lg">
+                <nav className="flex space-x-2">
+                    <NavItem icon={<Home size={24} />} label="Home" pageName="home" />
+                    <NavItem icon={<BookOpen size={24} />} label="School Projects" pageName="education" />
+                    <NavItem icon={<Code size={24} />} label="Simulation" pageName="simulation" />
+                </nav>
+            </header>
+        );
+    }
+
+    // Desktop View: Side Bar
     return (
-        <div className="bg-slate-800 text-white w-64 min-h-screen p-4 flex flex-col fixed top-0 left-0">
+        <aside className="bg-slate-800 text-white w-64 min-h-screen p-4 flex-col fixed top-0 left-0 hidden lg:flex">
             <div className="mb-10 text-center">
                 <h1 className="text-2xl font-bold text-white">Nicholas Reardon</h1>
                 <p className="text-sm text-slate-400">Computer Graphics Portfolio</p>
@@ -130,7 +147,7 @@ const Sidebar = ({ setPage, page }) => {
             <div className="mt-auto text-center text-slate-500 text-xs">
                 <p>&copy; 2024 Nicholas Reardon</p>
             </div>
-        </div>
+        </aside>
     );
 };
 
