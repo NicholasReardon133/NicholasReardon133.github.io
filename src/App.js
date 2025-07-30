@@ -3,7 +3,15 @@ import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School }
 
 // --- Helper Data ---
 // You can easily update your professional experience here
-const experienceData = [
+const experienceData = [    
+    {
+    date: "2025 - Present",
+    title: "Master's in Business and Technology",
+    company: "Purdue University",
+    description: "",
+    icon: <School size={20} className="text-white" />,
+    type: 'education'
+  },
     {
     date: "Summer 2024",
     title: "Software Engineer Intern",
@@ -37,6 +45,14 @@ const experienceData = [
     type: 'work'
   },
   {
+    date: "2021 - 2025",
+    title: "B.S. in Computer Science",
+    company: "Purdue University",
+    description: "Concentration in Computer Graphics and Visualization, Minor in Economics. <br /> GPA: 3.57",
+    icon: <School size={20} className="text-white" />,
+    type: 'education'
+  },
+  {
     date: "Summer 2021",
     title: "Quality Assurance Intern",
     company: "Netchex",
@@ -44,22 +60,6 @@ const experienceData = [
     icon: <Briefcase size={20} className="text-white" />,
     type: 'work'
   },
-    {
-    date: "2025 - Present",
-    title: "Master's in Business and Technology",
-    company: "Purdue University",
-    description: "",
-    icon: <School size={20} className="text-white" />,
-    type: 'education'
-  },
-  {
-    date: "2021 - 2025",
-    title: "B.S. in Computer Science",
-    company: "Purdue University",
-    description: "Concentration in Computer Graphics and Visualization, Minor in Economics. <br /> GPA: 3.57",
-    icon: <School size={20} className="text-white" />,
-    type: 'education'
-  }
 ];
 
 // You can update your project data here
@@ -158,7 +158,7 @@ const HomePage = () => {
         const yearA = parseInt(a.date.split(' ')[1] || a.date);
         const yearB = parseInt(b.date.split(' ')[1] || b.date);
         return yearB - yearA;
-    }).reverse();
+    });
 
     return (
         <div className="animate-fade-in">
