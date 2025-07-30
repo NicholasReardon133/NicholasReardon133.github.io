@@ -512,6 +512,19 @@ const Footer = () => {
 
 export default function App() {
     const [page, setPage] = useState('home');
+    // NEW: State to track if the view is mobile
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+    // NEW: Effect to listen for window resize
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 1024);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
 
     const renderPage = () => {
         switch (page) {
@@ -528,8 +541,10 @@ export default function App() {
 
     return (
         <div className="bg-slate-100 font-sans">
-            <Sidebar setPage={setPage} page={page} />
-            <main className="ml-64 p-8 min-h-screen flex flex-col">
+            {/* CHANGE: Pass isMobile prop to Navigation */}
+            <Navigation setPage={setPage} page={page} isMobile={isMobile}/>
+            {/* CHANGE: Main content padding adjusts based on isMobile */}
+            <main className={`p-8 min-h-screen flex flex-col transition-all duration-300 ${isMobile ? 'pt-24' : 'lg:ml-64'}`}>
                 <div className="flex-grow">
                     {renderPage()}
                 </div>
