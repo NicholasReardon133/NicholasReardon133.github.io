@@ -253,30 +253,28 @@ const EducationPage = () => {
 
 const SimulationPage = () => {
     const mountRef = useRef(null);
-    const sceneRef = useRef(null); // Ref to hold the scene object
+    const sceneRef = useRef(null);
     const [isLoading, setIsLoading] = useState(true);
     const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 0, z: 0 });
     const [showDragHint, setShowDragHint] = useState(false);
-    // NEW: State for the background
-    const [background, setBackground] = useState('/assets/img/moon.jpg');
+    // CHANGE: Default background is now 'space.jpg'
+    const [background, setBackground] = useState('/assets/img/space.jpg');
 
-    // NEW: Handle background change from dropdown
     const handleBackgroundChange = (e) => {
         setBackground(e.target.value);
     };
 
-    // This effect handles updating the background when the state changes
     useEffect(() => {
         if (sceneRef.current && window.THREE) {
             const scene = sceneRef.current;
             const value = background;
 
-            if (value.startsWith('/assets')) { // It's an image
+            if (value.startsWith('/assets')) {
                 const textureLoader = new window.THREE.TextureLoader();
                 textureLoader.load(value, (texture) => {
                     scene.background = texture;
                 });
-            } else { // It's a color
+            } else {
                 scene.background = new window.THREE.Color(value);
             }
         }
@@ -313,15 +311,15 @@ const SimulationPage = () => {
                 sceneRef.current = new window.THREE.Scene();
                 const scene = sceneRef.current;
                 
-                // Set initial background
                 const textureLoader = new window.THREE.TextureLoader();
                 textureLoader.load(background, (texture) => {
                     scene.background = texture;
                 });
 
                 camera = new window.THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
-                camera.position.set(0, 1, 15); 
-                setCameraPosition({ x: 0, y: 1, z: 15 });
+                // CHANGE: Updated camera position
+                camera.position.set(-9, -3, 20); 
+                setCameraPosition({ x: -9, y: -3, z: 20 });
 
                 renderer = new window.THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
@@ -415,7 +413,7 @@ const SimulationPage = () => {
             document.getElementById("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js")?.remove();
         };
 
-    }, []); // Main effect runs only once on mount
+    }, []);
 
     return (
         <div className="animate-fade-in h-full flex flex-col">
@@ -427,14 +425,15 @@ const SimulationPage = () => {
                             Click and drag to rotate the model, or use the dropdown to change the scene.
                         </p>
                     </div>
-                    {/* NEW: Background Selector Dropdown */}
                     <div className="flex-shrink-0">
-                        <label htmlFor="bg-select" className="block text-sm font-medium text-slate-700 mb-1">Background</label>
+                        {/* CHANGE: Increased font size and boldness of the label */}
+                        <label htmlFor="bg-select" className="block text-lg font-bold text-slate-800 mb-1">Background</label>
+                        {/* CHANGE: Increased text size and padding of the dropdown */}
                         <select
                             id="bg-select"
                             value={background}
                             onChange={handleBackgroundChange}
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md shadow-sm"
+                            className="mt-1 block w-full pl-3 pr-10 py-2 text-lg border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 rounded-md shadow-sm"
                         >
                             <option value="/assets/img/moon.jpg">Moon</option>
                             <option value="/assets/img/space.jpg">Space</option>
