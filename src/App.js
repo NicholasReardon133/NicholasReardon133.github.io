@@ -152,29 +152,18 @@ const Navigation = ({ setPage, page, isMobile }) => {
 };
 
 const HomePage = () => {
-    const [filter, setFilter] = useState('all');
+    // Sort experiences chronologically, assuming dates can be parsed or compared.
+    // A more robust solution would use full dates, but for this structure, we reverse to get newest first.
+    const sortedExperience = [...experienceData].sort((a, b) => {
+        const yearA = parseInt(a.date.split(' ')[1] || a.date);
+        const yearB = parseInt(b.date.split(' ')[1] || b.date);
+        return yearB - yearA;
+    }).reverse();
 
-    const filteredExperience = experienceData.filter(item => {
-        if (filter === 'all') return true;
-        return item.type === filter;
-    });
-
-    const FilterButton = ({ type, label }) => (
-        <button
-            onClick={() => setFilter(type)}
-            className={`px-4 py-2 rounded-md font-semibold text-sm transition-all duration-200 ${
-                filter === type
-                ? 'bg-sky-500 text-white shadow'
-                : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
-            }`}
-        >
-            {label}
-        </button>
-    );
     return (
         <div className="animate-fade-in">
             {/* Bio Section */}
-            <div className="bg-white p-8 rounded-xl shadow-lg mb-8">
+            <div className="bg-white p-8 rounded-xl shadow-lg mb-12">
                 <div className="flex flex-col md:flex-row items-center">
                     <img 
                         src="/assets/img/prof.jpg" 
@@ -190,36 +179,43 @@ const HomePage = () => {
                 </div>
             </div>
 
-            {/* Timeline Section */}
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-                <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
-                    <h2 className="text-3xl font-bold text-slate-800 mb-4 sm:mb-0">My Journey</h2>
-                    <div className="flex space-x-2">
-                        <FilterButton type="all" label="All" />
-                        <FilterButton type="work" label="Work Experience" />
-                        <FilterButton type="education" label="Education" />
-                    </div>
-                </div>
-                
-                <div className="relative border-l-2 border-slate-200 ml-4">
-                    {filteredExperience.map((item, index) => (
-                        // FIX: Removed margin from this parent div and added a new div for text content.
-                        <div key={index} className="mb-10 animate-fade-in">
-                            {/* Icon remains positioned relative to the timeline bar */}
-                            <div className={`absolute -left-5 mt-1.5 w-9 h-9 rounded-full border-4 border-white flex items-center justify-center shadow ${
-                                item.type === 'work' ? 'bg-sky-500' : 'bg-emerald-500'
-                            }`}>
-                                {item.icon}
+            {/* NEW Timeline Section */}
+            <div className="container mx-auto px-4">
+                <h2 className="text-3xl font-bold text-slate-800 mb-12 text-center">My Journey</h2>
+                <div className="relative wrap overflow-hidden p-10 h-full">
+                    {/* The central timeline bar */}
+                    <div className="absolute h-full border border-slate-700 border-2-2 bg-slate-700" style={{left: '50%'}}></div>
+
+                    {sortedExperience.map((item, index) => {
+                        const isWork = item.type === 'work';
+                        const isLeft = isWork; // Work on the left, Education on the right
+
+                        // Container for a single timeline event (a full row)
+                        const timelineRow = (
+                            <div key={index} className={`mb-8 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
+                                <div className="order-1 w-5/12"></div> {/* Empty space on one side */}
+                                
+                                {/* The circular icon on the timeline */}
+                                <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-12 h-12 rounded-full`}>
+                                    <div className="mx-auto text-white">
+                                        {item.icon}
+                                    </div>
+                                </div>
+                                
+                                {/* The content card */}
+                                <div
+                                    className="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 animate-fade-in-up"
+                                    style={{ animationDelay: `${index * 0.15}s`}}
+                                >
+                                    <time className={`mb-1 text-sm font-semibold leading-none ${isWork ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
+                                    <h3 className="mb-2 font-bold text-slate-800 text-lg">{item.title}</h3>
+                                    <h4 className="text-md font-medium text-slate-700 mb-3">{item.company}</h4>
+                                    <p className="text-sm leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>
+                                </div>
                             </div>
-                            {/* NEW DIV: This div wraps the text and applies the margin, pushing only the text to the right. */}
-                            <div className="ml-10">
-                                <time className="mb-1 text-sm font-normal leading-none text-slate-500">{item.date}</time>
-                                <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
-                                <h4 className="text-md font-medium text-slate-700">{item.company}</h4>
-                                <p className="mt-2 text-base font-normal text-slate-600">{item.description}</p>
-                            </div>
-                        </div>
-                    ))}
+                        );
+                        return timelineRow;
+                    })}
                 </div>
             </div>
         </div>
