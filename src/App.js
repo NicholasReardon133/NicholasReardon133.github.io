@@ -254,6 +254,10 @@ const EducationPage = () => {
 const SimulationPage = () => {
     const mountRef = useRef(null);
     const [isLoading, setIsLoading] = useState(true);
+    // NEW: State for camera position display
+    const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 0, z: 0 });
+    // NEW: State for the interaction hint
+    const [showDragHint, setShowDragHint] = useState(false);
 
     useEffect(() => {
         let renderer, scene, camera, controls, animateId;
@@ -282,6 +286,7 @@ const SimulationPage = () => {
 
                 camera = new window.THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
                 camera.position.set(0, 1, 15); 
+                setCameraPosition({ x: 0, y: 1, z: 15 }); // Initialize position display
 
                 renderer = new window.THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
@@ -300,9 +305,15 @@ const SimulationPage = () => {
                 controls.minDistance = 2;
                 controls.maxDistance = 50;
 
-                // --- NEW: Texture Loader for Background ---
+                // NEW: Event listener to hide hint on first interaction
+                const hideHintOnFirstInteraction = () => {
+                    setShowDragHint(false);
+                    controls.removeEventListener('start', hideHintOnFirstInteraction);
+                };
+                controls.addEventListener('start', hideHintOnFirstInteraction);
+
                 const textureLoader = new window.THREE.TextureLoader();
-                textureLoader.load('/assets/img/moon.jpg', (texture) => {
+                textureLoader.load('/assets/img/space.jpg', (texture) => {
                     scene.background = texture;
                 });
 
@@ -316,6 +327,8 @@ const SimulationPage = () => {
                         model.position.sub(center);
                         scene.add(model);
                         setIsLoading(false);
+                        // NEW: Show the hint after loading is complete
+                        setShowDragHint(true);
                     },
                     undefined,
                     (error) => {
@@ -327,6 +340,18 @@ const SimulationPage = () => {
                 const animate = function () {
                     animateId = requestAnimationFrame(animate);
                     controls.update();
+                    
+                    // NEW: Update camera position display, rounded to 2 decimal places
+                    setCameraPosition(prevPos => {
+                        const newX = parseFloat(camera.position.x.toFixed(2));
+                        const newY = parseFloat(camera.position.y.toFixed(2));
+                        const newZ = parseFloat(camera.position.z.toFixed(2));
+                        if (newX !== prevPos.x || newY !== prevPos.y || newZ !== prevPos.z) {
+                            return { x: newX, y: newY, z: newZ };
+                        }
+                        return prevPos;
+                    });
+
                     renderer.render(scene, camera);
                 };
                 animate();
@@ -354,6 +379,9 @@ const SimulationPage = () => {
         return () => {
             cancelAnimationFrame(animateId);
             window.removeEventListener('resize', handleResize);
+            if (controls) {
+                controls.dispose();
+            }
             if (mountRef.current && renderer && renderer.domElement) {
                 mountRef.current.removeChild(renderer.domElement);
             }
@@ -367,21 +395,36 @@ const SimulationPage = () => {
     return (
         <div className="animate-fade-in h-full flex flex-col">
             <div className="bg-white p-8 rounded-xl shadow-lg mb-8">
-                <h1 className="text-4xl font-bold text-slate-800 mb-2">Interactive 3D Gateway Simulation</h1>
+                <h1 className="text-4xl font-bold text-slate-800 mb-2">Interactive 3D Simulation</h1>
                 <p className="text-lg text-slate-600">
-                    This page is dedicated to an interactive 3D simulation for the Gateway Lunar Space Station built with three.js.
+                    This page is dedicated to an interactive 3D simulation built with three.js.
                     Click and drag to rotate the model.
                 </p>
             </div>
             <div ref={mountRef} className="relative w-full flex-grow bg-slate-900 rounded-xl shadow-inner" style={{minHeight: '60vh'}}>
                 {isLoading && (
-                    <div className="absolute inset-0 flex justify-center items-center bg-slate-900 z-10">
+                    <div className="absolute inset-0 flex justify-center items-center bg-slate-900 z-20">
                         <div className="text-center">
                             <div className="w-12 h-12 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
                             <p className="mt-4 text-white font-semibold">Loading Model...</p>
                         </div>
                     </div>
                 )}
+                {/* NEW: Drag hint overlay */}
+                {showDragHint && (
+                    <div className="absolute inset-0 flex justify-center items-center z-10 pointer-events-none transition-opacity duration-500">
+                        <div className="bg-black bg-opacity-60 text-white font-semibold px-4 py-2 rounded-lg animate-pulse">
+                            Click and drag to explore
+                        </div>
+                    </div>
+                )}
+                {/* NEW: Camera data display */}
+                <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-gray-300 text-xs font-mono p-2 rounded-md pointer-events-none">
+                    <p>Camera Position:</p>
+                    <p>X: {cameraPosition.x}</p>
+                    <p>Y: {cameraPosition.y}</p>
+                    <p>Z: {cameraPosition.z}</p>
+                </div>
             </div>
         </div>
     );
