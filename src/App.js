@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School } from 'lucide-react';
+import { Home, BookOpen, Code, Mail, Linkedin, Github, Briefcase, School, FolderKanban, ArrowLeft } from 'lucide-react';
 
 // --- Helper Data ---
 const experienceData = [
@@ -68,7 +68,6 @@ const experienceData = [
     },
 ];
 
-// You can update your project data here
 const schoolProjects = [
     {
         title: "Unity Occlusion Culling",
@@ -104,15 +103,36 @@ const schoolProjects = [
     }
 ];
 
+const mainProjectsData = [
+    {
+        id: 'gateway-simulation',
+        title: 'Gateway Station Simulation',
+        imageSrc: 'https://placehold.co/600x400/1e293b/ffffff?text=Gateway+Sim',
+    },
+    {
+        id: 'occlusion-culling',
+        title: 'Real-Time Occlusion Culling in Unity',
+        imageSrc: 'https://placehold.co/600x400/1e293b/ffffff?text=Occlusion+Culling',
+    },
+    {
+        id: 'graphics-engine',
+        title: 'From Scratch 3D Graphics Engine using C++',
+        imageSrc: 'https://placehold.co/600x400/1e293b/ffffff?text=C+++Engine',
+    },
+    {
+        id: 'graphics-deep-dive',
+        title: 'Computer Graphics Deep Dive',
+        imageSrc: 'https://placehold.co/600x400/1e293b/ffffff?text=CG+Deep+Dive',
+    }
+];
+
 
 // --- Components ---
 
-// CHANGE: Renamed Sidebar to Navigation for clarity
 const Navigation = ({ setPage, page, isMobile }) => {
     const NavItem = ({ icon, label, pageName }) => (
         <button
             onClick={() => setPage(pageName)}
-            // CHANGE: Styling adjusted for both mobile and desktop
             className={`flex items-center justify-center lg:justify-start w-full text-left px-4 py-3 my-1 rounded-lg transition-all duration-200 ${
                 page === pageName 
                 ? 'bg-sky-500 text-white shadow-lg' 
@@ -120,17 +140,16 @@ const Navigation = ({ setPage, page, isMobile }) => {
             }`}
         >
             {icon}
-            {/* CHANGE: Text label is hidden on mobile screens */}
             <span className="ml-4 font-semibold hidden lg:block">{label}</span>
         </button>
     );
 
-    // Mobile View: Top Bar
     if (isMobile) {
         return (
             <header className="bg-slate-800 text-white w-full p-2 flex justify-center fixed top-0 left-0 z-30 shadow-lg">
                 <nav className="flex space-x-2">
                     <NavItem icon={<Home size={24} />} label="Home" pageName="home" />
+                    <NavItem icon={<FolderKanban size={24} />} label="Projects" pageName="projects" />
                     <NavItem icon={<BookOpen size={24} />} label="School Projects" pageName="education" />
                     <NavItem icon={<Code size={24} />} label="Simulation" pageName="simulation" />
                 </nav>
@@ -138,7 +157,6 @@ const Navigation = ({ setPage, page, isMobile }) => {
         );
     }
 
-    // Desktop View: Side Bar
     return (
         <aside className="bg-slate-800 text-white w-64 min-h-screen p-4 flex-col fixed top-0 left-0 hidden lg:flex">
             <div className="mb-10 text-center">
@@ -147,6 +165,7 @@ const Navigation = ({ setPage, page, isMobile }) => {
             </div>
             <nav>
                 <NavItem icon={<Home size={20} />} label="Home" pageName="home" />
+                <NavItem icon={<FolderKanban size={20} />} label="Projects" pageName="projects" />
                 <NavItem icon={<BookOpen size={20} />} label="School Projects" pageName="education" />
                 <NavItem icon={<Code size={20} />} label="Simulation" pageName="simulation" />
             </nav>
@@ -160,7 +179,6 @@ const Navigation = ({ setPage, page, isMobile }) => {
 const HomePage = () => {
     return (
         <div className="animate-fade-in">
-            {/* Bio Section */}
             <div className="bg-white p-8 rounded-xl shadow-lg mb-12">
                 <div className="flex flex-col md:flex-row items-center">
                     <img 
@@ -177,7 +195,6 @@ const HomePage = () => {
                 </div>
             </div>
 
-            {/* Timeline Section */}
             <div className="container mx-auto px-4">
                 <h2 className="text-5xl font-bold text-slate-800 mt-36 mb-36 text-center">My Journey</h2>
                 <div className="relative wrap overflow-hidden p-10 h-full mb-24">
@@ -188,10 +205,8 @@ const HomePage = () => {
                         const isLeft = isWork; 
 
                         const timelineRow = (
-                            // COMMENT: To adjust the spacing between timeline items, change the 'mb-24' (margin-bottom) class below.
-                            // Larger numbers (e.g., mb-32) increase the space, smaller numbers (e.g., mb-16) decrease it.
                             <div key={index} className={`mb-32 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
-                                <div className="order-1 w-5/12 flex justify-center animate-fade-in-up" style={{ animationDelay: `${index * 0.15}s`}}>
+                                <div className="order-1 w-5/12 flex justify-center animate-fade-in-up" style={{ animationDelay: `${index * 0.25}s`}}>
                                     <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-64 h-64 object-cover" />
                                 </div>
                                 
@@ -203,7 +218,7 @@ const HomePage = () => {
                                 
                                 <div
                                     className="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 animate-fade-in-up"
-                                    style={{ animationDelay: `${index}s`}}
+                                    style={{ animationDelay: `${index * 0.25}s`}}
                                 >
                                     <time className={`mb-1 text-md font-semibold leading-none ${isWork ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
                                     <h3 className="mb-2 font-bold text-slate-800 text-2xl">{item.title}</h3>
@@ -220,6 +235,62 @@ const HomePage = () => {
     );
 };
 
+// CHANGE: This component now manages its own state for showing details
+const ProjectsPage = () => {
+    const [selectedProject, setSelectedProject] = useState(null);
+
+    // If a project is selected, show its detail page
+    if (selectedProject) {
+        return <ProjectDetailPage projectId={selectedProject} onBack={() => setSelectedProject(null)} />;
+    }
+
+    // Otherwise, show the grid of all projects
+    return (
+        <div className="animate-fade-in">
+            <div className="text-center mb-12">
+                <h1 className="text-5xl font-bold text-slate-800 mb-4">My Projects</h1>
+                <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                    Here is a collection of my favorite projects, ranging from interactive real-time simulations to the foundational principles of 3D graphics. Each card represents a unique challenge and a story of creative problem-solving.
+                </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                {mainProjectsData.map((project, index) => (
+                    <div 
+                        key={project.id} 
+                        className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:scale-105 transition-transform duration-300 group animate-fade-in-up"
+                        style={{ animationDelay: `${index * 0.1}s`}}
+                        onClick={() => setSelectedProject(project.id)}
+                    >
+                        <img src={project.imageSrc} alt={project.title} className="w-full h-64 object-cover" />
+                        <div className="p-6">
+                            <h2 className="text-2xl font-bold text-slate-800 group-hover:text-sky-600 transition-colors duration-300">{project.title}</h2>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const ProjectDetailPage = ({ projectId, onBack }) => {
+    const project = mainProjectsData.find(p => p.id === projectId);
+    return (
+        <div className="animate-fade-in">
+            <button onClick={onBack} className="flex items-center text-slate-600 hover:text-sky-600 font-semibold mb-8 transition-colors">
+                <ArrowLeft size={20} className="mr-2" />
+                Back to All Projects
+            </button>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+                <h1 className="text-4xl font-bold text-slate-800">{project.title}</h1>
+                <p className="mt-4 text-lg text-slate-600">
+                    Content for this project will be added soon.
+                </p>
+            </div>
+        </div>
+    );
+};
+
+
 const EducationPage = () => {
     return (
         <div className="animate-fade-in">
@@ -231,7 +302,6 @@ const EducationPage = () => {
             <div className="space-y-12">
                 {schoolProjects.map((project, index) => (
                     <div key={index} className="bg-white p-8 rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row items-center gap-8">
-                        {/* Media Content */}
                         <div className="w-full lg:w-1/2">
                             {project.mediaType === 'video' ? (
                                 <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
@@ -248,8 +318,6 @@ const EducationPage = () => {
                                 </div>
                             )}
                         </div>
-
-                        {/* Text Content */}
                         <div className="w-full lg:w-1/2">
                             <h2 className="text-2xl font-bold text-slate-800 mb-3">{project.title}</h2>
                             <p className="text-slate-600">{project.description}</p>
@@ -268,7 +336,6 @@ const SimulationPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 0, z: 0 });
     const [showDragHint, setShowDragHint] = useState(false);
-    // CHANGE: Default background is now 'space.jpg'
     const [background, setBackground] = useState('/assets/img/space.jpg');
 
     const handleBackgroundChange = (e) => {
@@ -328,7 +395,6 @@ const SimulationPage = () => {
                 });
 
                 camera = new window.THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
-                // CHANGE: Updated camera position
                 camera.position.set(-9, -3, 20); 
                 setCameraPosition({ x: -9, y: -3, z: 20 });
 
@@ -437,9 +503,7 @@ const SimulationPage = () => {
                         </p>
                     </div>
                     <div className="flex-shrink-0">
-                        {/* CHANGE: Increased font size and boldness of the label */}
                         <label htmlFor="bg-select" className="block text-lg font-bold text-slate-800 mb-1">Background</label>
-                        {/* CHANGE: Increased text size and padding of the dropdown */}
                         <select
                             id="bg-select"
                             value={background}
@@ -506,10 +570,8 @@ const Footer = () => {
 
 export default function App() {
     const [page, setPage] = useState('home');
-    // NEW: State to track if the view is mobile
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
-    // NEW: Effect to listen for window resize
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 1024);
@@ -524,6 +586,8 @@ export default function App() {
         switch (page) {
             case 'home':
                 return <HomePage />;
+            case 'projects':
+                return <ProjectsPage />;
             case 'education':
                 return <EducationPage />;
             case 'simulation':
@@ -535,9 +599,7 @@ export default function App() {
 
     return (
         <div className="bg-slate-100 font-sans">
-            {/* CHANGE: Pass isMobile prop to Navigation */}
             <Navigation setPage={setPage} page={page} isMobile={isMobile}/>
-            {/* CHANGE: Main content padding adjusts based on isMobile */}
             <main className={`p-8 min-h-screen flex flex-col transition-all duration-300 ${isMobile ? 'pt-24' : 'lg:ml-64'}`}>
                 <div className="flex-grow">
                     {renderPage()}
@@ -551,6 +613,20 @@ export default function App() {
                 }
                 .animate-fade-in {
                     animation: fade-in 0.5s ease-out forwards;
+                }
+                @keyframes fade-in-up {
+                    from { 
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    to { 
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                .animate-fade-in-up {
+                    opacity: 0;
+                    animation: fade-in-up 0.5s ease-out forwards;
                 }
                 .aspect-w-16 { position: relative; padding-bottom: 56.25%; }
                 .aspect-h-9 { height: 0; }
