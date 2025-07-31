@@ -629,7 +629,7 @@ const SimulationPage = ({ isEmbedded = false }) => {
             </div>
              {isEmbedded && (
                 <div className="mt-8 text-center">
-                    <a href="https://github.com/NicholasReardon133/3D-Portfolio-Gateway" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-8 py-4 bg-slate-800 text-white font-semibold rounded-lg shadow-md hover:bg-sky-600 transition-colors">
+                    <a href="https://github.com/NicholasReardon133/GatewaySimulation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-8 py-4 bg-slate-800 text-white font-semibold rounded-lg shadow-md hover:bg-sky-600 transition-colors">
                         <Github size={24} className="mr-3" />
                         View on GitHub
                     </a>
