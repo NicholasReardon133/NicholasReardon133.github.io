@@ -149,7 +149,6 @@ const graphicsEngineDetails = {
 };
 
 // --- Custom Hooks ---
-// NEW: Custom hook to detect when an element is visible in the viewport
 const useIntersectionObserver = (options) => {
     const [ref, setRef] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -219,7 +218,7 @@ const Navigation = ({ setPage, page, isMobile }) => {
     );
 };
 
-// NEW: Timeline Item component with scroll animation logic
+//Timeline Item component with scroll animation logic
 const TimelineItem = ({ item, isMobile }) => {
     const [setRef, isVisible] = useIntersectionObserver({ threshold: 0.2 });
     
