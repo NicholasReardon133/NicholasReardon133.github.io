@@ -195,7 +195,7 @@ const HomePage = () => {
                                     <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-64 h-64 object-cover" />
                                 </div>
                                 
-                                <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-12 h-12 rounded-full`}>
+                                <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-24 h-24 rounded-full`}>
                                     <div className="mx-auto text-white">
                                         {item.icon}
                                     </div>
@@ -203,12 +203,12 @@ const HomePage = () => {
                                 
                                 <div
                                     className="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 animate-fade-in-up"
-                                    style={{ animationDelay: `${index * 0.50}s`}}
+                                    style={{ animationDelay: `${index}s`}}
                                 >
-                                    <time className={`mb-1 text-sm font-semibold leading-none ${isWork ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
-                                    <h3 className="mb-2 font-bold text-slate-800 text-lg">{item.title}</h3>
-                                    <h4 className="text-md font-medium text-slate-700 mb-3">{item.company}</h4>
-                                    <p className="text-sm leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>
+                                    <time className={`mb-1 text-md font-semibold leading-none ${isWork ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
+                                    <h3 className="mb-2 font-bold text-slate-800 text-2xl">{item.title}</h3>
+                                    <h4 className="text-lg font-medium text-slate-700 mb-3">{item.company}</h4>
+                                    <p className="text-md leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>
                                 </div>
                             </div>
                         );
