@@ -148,6 +148,31 @@ const graphicsEngineDetails = {
     ]
 };
 
+// --- Custom Hooks ---
+// NEW: Custom hook to detect when an element is visible in the viewport
+const useIntersectionObserver = (options) => {
+    const [ref, setRef] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            setIsVisible(entry.isIntersecting);
+        }, options);
+
+        if (ref) {
+            observer.observe(ref);
+        }
+
+        return () => {
+            if (ref) {
+                observer.unobserve(ref);
+            }
+        };
+    }, [ref, options]);
+
+    return [setRef, isVisible];
+};
+
 
 // --- Components ---
 
@@ -194,6 +219,50 @@ const Navigation = ({ setPage, page, isMobile }) => {
     );
 };
 
+// NEW: Timeline Item component with scroll animation logic
+const TimelineItem = ({ item, isMobile }) => {
+    const [setRef, isVisible] = useIntersectionObserver({ threshold: 0.2 });
+    
+    if (isMobile) {
+        return (
+            <div
+                ref={setRef}
+                className={`bg-white p-6 rounded-lg shadow-lg transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
+            >
+                <time className={`block mb-2 text-sm font-semibold leading-none ${item.type === 'work' ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
+                <h3 className="mb-1 font-bold text-slate-800 text-xl">{item.title}</h3>
+                <h4 className="text-md font-medium text-slate-700 mb-3">{item.company}</h4>
+                {item.description && <p className="text-sm leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>}
+            </div>
+        );
+    }
+
+    const isWork = item.type === 'work';
+    const isLeft = isWork;
+
+    return (
+        <div ref={setRef} className={`mb-32 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
+            <div className={`order-1 w-5/12 flex justify-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-x-0' : `opacity-0 ${isLeft ? 'translate-x-10' : '-translate-x-10'}`}`}>
+                <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-64 h-64 object-cover" />
+            </div>
+            
+            <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-16 h-16 rounded-full transition-transform duration-500 ${isVisible ? 'scale-100' : 'scale-0'}`}>
+                <div className="mx-auto text-white">
+                    {item.icon}
+                </div>
+            </div>
+            
+            <div className={`order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-x-0' : `opacity-0 ${isLeft ? '-translate-x-10' : 'translate-x-10'}`}`}>
+                <time className={`mb-1 text-md font-semibold leading-none ${isWork ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
+                <h3 className="mb-2 font-bold text-slate-800 text-2xl">{item.title}</h3>
+                <h4 className="text-lg font-medium text-slate-700 mb-3">{item.company}</h4>
+                <p className="text-md leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>
+            </div>
+        </div>
+    );
+};
+
+
 const HomePage = ({ isMobile }) => {
     return (
         <div className="animate-fade-in">
@@ -214,59 +283,20 @@ const HomePage = ({ isMobile }) => {
             </div>
 
             <div className="container mx-auto px-4">
-                <h2 className="text-5xl font-bold text-slate-800 mt-12 md:mt-36 mb-12 md:mb-36 text-center">My Journey</h2>
+                <h2 className="text-5xl font-bold text-slate-800 mt-12 md:mt-36 mb-12 md:mb-24 text-center">My Journey</h2>
                 
-                {/* CHANGE: Conditional rendering for timeline based on screen size */}
                 {isMobile ? (
-                    // Mobile Timeline: Simple list view
                     <div className="space-y-8">
                         {experienceData.map((item, index) => (
-                            <div
-                                key={index}
-                                className="bg-white p-6 rounded-lg shadow-lg animate-fade-in-up"
-                                style={{ animationDelay: `${index * 0.1}s` }}
-                            >
-                                <time className={`block mb-2 text-sm font-semibold leading-none ${item.type === 'work' ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
-                                <h3 className="mb-1 font-bold text-slate-800 text-xl">{item.title}</h3>
-                                <h4 className="text-md font-medium text-slate-700 mb-3">{item.company}</h4>
-                                {item.description && <p className="text-sm leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>}
-                            </div>
+                            <TimelineItem key={index} item={item} isMobile={true} />
                         ))}
                     </div>
                 ) : (
-                    // Desktop Timeline: Branching view
-                    <div className="relative wrap overflow-hidden p-10 h-full mb-24">
+                    <div className="relative wrap overflow-hidden p-10 h-full">
                         <div className="absolute h-full border border-slate-700 border-2-2 bg-slate-700" style={{left: '50%'}}></div>
-
-                        {experienceData.map((item, index) => {
-                            const isWork = item.type === 'work';
-                            const isLeft = isWork; 
-
-                            const timelineRow = (
-                                <div key={index} className={`mb-32 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
-                                    <div className="order-1 w-5/12 flex justify-center animate-fade-in-up" style={{ animationDelay: `${index * 0.25}s`}}>
-                                        <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-64 h-64 object-cover" />
-                                    </div>
-                                    
-                                    <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-16 h-16 rounded-full`}>
-                                        <div className="mx-auto text-white">
-                                            {item.icon}
-                                        </div>
-                                    </div>
-                                    
-                                    <div
-                                        className="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 animate-fade-in-up"
-                                        style={{ animationDelay: `${index * 0.25}s`}}
-                                    >
-                                        <time className={`mb-1 text-md font-semibold leading-none ${isWork ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
-                                        <h3 className="mb-2 font-bold text-slate-800 text-2xl">{item.title}</h3>
-                                        <h4 className="text-lg font-medium text-slate-700 mb-3">{item.company}</h4>
-                                        <p className="text-md leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>
-                                    </div>
-                                </div>
-                            );
-                            return timelineRow;
-                        })}
+                        {experienceData.map((item, index) => (
+                           <TimelineItem key={index} item={item} isMobile={false} />
+                        ))}
                     </div>
                 )}
             </div>
@@ -284,7 +314,7 @@ const ProjectsPage = () => {
     return (
         <div className="animate-fade-in">
             <div className="text-center mb-12">
-                <h1 className="text-5xl font-bold text-slate-800 mb-4">My Projects</h1>
+                <h1 className="text-5xl font-bold text-slate-800 mt-8 mb-12">My Projects</h1>
                 <p className="text-xl text-slate-600 max-w-3xl mx-auto">
                     Here is a collection of my favorite projects, ranging from interactive real-time simulations to the foundational principles of 3D graphics. Each card represents a unique challenge and a story of creative problem-solving.
                 </p>
