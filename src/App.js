@@ -133,17 +133,16 @@ const deepDiveDetails = {
     ]
 };
 
-// NEW: Data for the Graphics Engine project page
 const graphicsEngineDetails = {
     title: "From Scratch 3D Graphics Engine using C++",
     githubUrl: "https://github.com/NicholasReardon133/RendererProject/tree/master",
     sections: [
         {
-            image: '/assets/img/engine2.png', // Replace with your first image
+            image: '/assets/img/engine2.png',
             text: "This project was a comprehensive journey into the fundamentals of 3D graphics, built from the ground up in C++ using the DirectX 11 API. Following the excellent tutorial series by ChiliTomatoNoodle, I implemented a complete rendering pipeline, starting with the raw Win32 API for window creation and message handling. This foundational step provided a deep understanding of how a graphics application interfaces with the operating system before any rendering even begins. After that, it took implementing debug diagnostics, keyboard and mouse capture, Component Object Model (COM) programming, and shader construction to get our first triangle."
         },
         {
-            image: '/assets/img/engine3.png', // Replace with your tall second image
+            image: '/assets/img/engine3.png',
             text: "At its core, the engine is a custom implementation of the DirectX 11 graphics pipeline. I implemented vertex shaders for transforming model vertices from local space to screen space and pixel shaders for applying lighting and textures. The engine supports loading and rendering 3D models, with a controllable 3D camera and a basic implementation of the Phong lighting model for realistic shading. This project was an invaluable exercise in understanding the low-level mechanics of 3D rendering that are often abstracted away by modern game engines."
         }
     ]
@@ -195,7 +194,7 @@ const Navigation = ({ setPage, page, isMobile }) => {
     );
 };
 
-const HomePage = () => {
+const HomePage = ({ isMobile }) => {
     return (
         <div className="animate-fade-in">
             <div className="bg-white p-8 rounded-xl shadow-lg mb-12">
@@ -215,40 +214,61 @@ const HomePage = () => {
             </div>
 
             <div className="container mx-auto px-4">
-                <h2 className="text-5xl font-bold text-slate-800 mt-36 mb-36 text-center">My Journey</h2>
-                <div className="relative wrap overflow-hidden p-10 h-full mb-24">
-                    <div className="absolute h-full border border-slate-700 border-2-2 bg-slate-700" style={{left: '50%'}}></div>
+                <h2 className="text-5xl font-bold text-slate-800 mt-12 md:mt-36 mb-12 md:mb-36 text-center">My Journey</h2>
+                
+                {/* CHANGE: Conditional rendering for timeline based on screen size */}
+                {isMobile ? (
+                    // Mobile Timeline: Simple list view
+                    <div className="space-y-8">
+                        {experienceData.map((item, index) => (
+                            <div
+                                key={index}
+                                className="bg-white p-6 rounded-lg shadow-lg animate-fade-in-up"
+                                style={{ animationDelay: `${index * 0.1}s` }}
+                            >
+                                <time className={`block mb-2 text-sm font-semibold leading-none ${item.type === 'work' ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
+                                <h3 className="mb-1 font-bold text-slate-800 text-xl">{item.title}</h3>
+                                <h4 className="text-md font-medium text-slate-700 mb-3">{item.company}</h4>
+                                {item.description && <p className="text-sm leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>}
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    // Desktop Timeline: Branching view
+                    <div className="relative wrap overflow-hidden p-10 h-full mb-24">
+                        <div className="absolute h-full border border-slate-700 border-2-2 bg-slate-700" style={{left: '50%'}}></div>
 
-                    {experienceData.map((item, index) => {
-                        const isWork = item.type === 'work';
-                        const isLeft = isWork; 
+                        {experienceData.map((item, index) => {
+                            const isWork = item.type === 'work';
+                            const isLeft = isWork; 
 
-                        const timelineRow = (
-                            <div key={index} className={`mb-32 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
-                                <div className="order-1 w-5/12 flex justify-center animate-fade-in-up" style={{ animationDelay: `${index * 0.25}s`}}>
-                                    <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-64 h-64 object-cover" />
-                                </div>
-                                
-                                <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-16 h-16 rounded-full`}>
-                                    <div className="mx-auto text-white">
-                                        {item.icon}
+                            const timelineRow = (
+                                <div key={index} className={`mb-32 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
+                                    <div className="order-1 w-5/12 flex justify-center animate-fade-in-up" style={{ animationDelay: `${index * 0.25}s`}}>
+                                        <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-64 h-64 object-cover" />
+                                    </div>
+                                    
+                                    <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-16 h-16 rounded-full`}>
+                                        <div className="mx-auto text-white">
+                                            {item.icon}
+                                        </div>
+                                    </div>
+                                    
+                                    <div
+                                        className="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 animate-fade-in-up"
+                                        style={{ animationDelay: `${index * 0.25}s`}}
+                                    >
+                                        <time className={`mb-1 text-md font-semibold leading-none ${isWork ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
+                                        <h3 className="mb-2 font-bold text-slate-800 text-2xl">{item.title}</h3>
+                                        <h4 className="text-lg font-medium text-slate-700 mb-3">{item.company}</h4>
+                                        <p className="text-md leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>
                                     </div>
                                 </div>
-                                
-                                <div
-                                    className="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 animate-fade-in-up"
-                                    style={{ animationDelay: `${index * 0.25}s`}}
-                                >
-                                    <time className={`mb-1 text-md font-semibold leading-none ${isWork ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
-                                    <h3 className="mb-2 font-bold text-slate-800 text-2xl">{item.title}</h3>
-                                    <h4 className="text-lg font-medium text-slate-700 mb-3">{item.company}</h4>
-                                    <p className="text-md leading-snug tracking-wide text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }}></p>
-                                </div>
-                            </div>
-                        );
-                        return timelineRow;
-                    })}
-                </div>
+                            );
+                            return timelineRow;
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -678,11 +698,11 @@ export default function App() {
     const renderPage = () => {
         switch (page) {
             case 'home':
-                return <HomePage />;
+                return <HomePage isMobile={isMobile} />;
             case 'projects':
                 return <ProjectsPage />;
             default:
-                return <HomePage />;
+                return <HomePage isMobile={isMobile} />;
         }
     };
 
