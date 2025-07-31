@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Home, BookOpen, Code, Mail, Linkedin, Github, Briefcase, School, FolderKanban, ArrowLeft } from 'lucide-react';
+import { Home, Code, Mail, Linkedin, Github, Briefcase, School, FolderKanban, ArrowLeft } from 'lucide-react';
 
 // --- Helper Data ---
 const experienceData = [
@@ -68,63 +68,86 @@ const experienceData = [
     },
 ];
 
-const schoolProjects = [
-    {
-        title: "Unity Occlusion Culling",
-        description: "In this project, I created an occlusion culling script that utilized raycasting to selectively render visible objects. I created all of the building models in Blender, as well as the testing environment in Unity. The first step is to set up Frustrum Culling, which involves testing if the buildings' bounding boxes are within the field of view of the camera. After that, I cast rays from the camera to all of the remaining bounding boxes, and any object that the rays do not reach are not rendered.",
-        mediaType: 'video',
-        mediaSrc: 'https://www.youtube.com/embed/8F179_CA1AI',
-        images: [
-            "/assets/img/build2.PNG",
-            "/assets/img/build3.PNG",
-            "/assets/img/build1.PNG"
-        ]
-    },
-    {
-        title: "Procedural Modeling & L-Systems",
-        description: "In this project, I implemented a mini-procedural tree modeler using L-Systems. It reads in a simple text file containing the rotation angle, iterations, axiom, and rules. Once the string is created, it is translated into 2D line segments following 'turtle drawing' logic to produce the geometry.",
-        mediaType: 'image',
-        mediaSrc: '/assets/img/proced.gif',
-        images: []
-    },
-    {
-        title: "Texture, Bump, and Shadow Mapping",
-        description: "For this project, I first had to construct the TBN coordinate system and convert the computation of lighting from world space to tangent space. Next, I rendered the scene from the light's persepctive to get the depth map as a texture, and then added shading and shadows in their respective places. In addition, I added diffusion into the shadows to create 'soft shadows.'",
-        mediaType: 'image',
-        mediaSrc: '/assets/img/shadow.gif',
-        images: []
-    },
-    {
-        title: "Ray Tracing & Phong Shading",
-        description: "Starting with a sphere, ground plane, sky, and light source, I implemented ray-sphere intersection and computed surface normals for the sphere and plane. Next, I created a shading function based on the Phong model, as well as specular reflection to result in its glossy finish.",
-        mediaType: 'image',
-        mediaSrc: '/assets/img/phong.gif',
-        images: []
-    }
-];
-
 const mainProjectsData = [
     {
         id: 'gateway-simulation',
         title: 'Gateway Station Simulation',
-        imageSrc: 'https://placehold.co/600x400/1e293b/ffffff?text=Gateway+Sim',
+        imageSrc: '/assets/img/gateway.jpg',
     },
     {
         id: 'occlusion-culling',
         title: 'Real-Time Occlusion Culling in Unity',
-        imageSrc: 'https://placehold.co/600x400/1e293b/ffffff?text=Occlusion+Culling',
+        imageSrc: '/assets/img/occlusion.png',
     },
     {
         id: 'graphics-engine',
         title: 'From Scratch 3D Graphics Engine using C++',
-        imageSrc: 'https://placehold.co/600x400/1e293b/ffffff?text=C+++Engine',
+        imageSrc: '/assets/img/engine1.png',
     },
     {
         id: 'graphics-deep-dive',
         title: 'Computer Graphics Deep Dive',
-        imageSrc: 'https://placehold.co/600x400/1e293b/ffffff?text=CG+Deep+Dive',
+        imageSrc: '/assets/img/deepdive.jpg',
     }
 ];
+
+const occlusionCullingDetails = {
+    title: "Real-Time Occlusion Culling in Unity",
+    youtubeSrc: "https://www.youtube.com/embed/8F179_CA1AI",
+    githubUrl: "https://github.com/NicholasReardon133/Occlusion-Culling",
+    sections: [
+        {
+            text: "In this project, I created an occlusion culling script that utilized raycasting to selectively render visible objects. I created all of the building models in Blender, as well as the testing environment in Unity. The first step is to set up Frustum Culling, which involves testing if the buildings' bounding boxes are within the field of view of the camera.",
+            image: '/assets/img/build1.PNG'
+        },
+        {
+            text: "After the initial pass of Frustum Culling, the next step is to cast rays from the camera to the corners of the bounding boxes for all remaining objects. Any object that is not struck by a ray is considered 'occluded' by another object and is therefore not rendered by the camera. This two-pass system significantly improves performance in dense environments.",
+            image: '/assets/img/build2.PNG'
+        },
+        {
+            text: "The final result is a system where only the necessary geometry is rendered to the screen, freeing up GPU resources and increasing the frame rate. This technique is crucial for developing complex and performant 3D scenes in games and simulations. The complete project, including the C# scripts and Unity setup, is available to view on GitHub.",
+            image: '/assets/img/wire.PNG'
+        },
+    ]
+};
+
+const deepDiveDetails = {
+    title: "Computer Graphics Deep Dive",
+    githubUrl: "https://github.com/NicholasReardon133/Boilerplate-Graphics-Code",
+    topics: [
+        {
+            title: "Procedural Modeling & L-Systems",
+            mediaSrc: '/assets/img/proced.gif',
+            description: "Implemented a procedural tree modeler using L-Systems, a type of formal grammar. The system reads a text file defining an axiom (the starting string), production rules (how to expand the string), an angle, and iteration count. The resulting string is then interpreted using 'turtle graphics' logic, where characters correspond to actions like 'draw forward', 'turn left', or 'push/pop state', to generate complex, fractal-like 2D geometry from a simple set of rules."
+        },
+        {
+            title: "Texture, Bump, and Shadow Mapping",
+            mediaSrc: '/assets/img/shadow.gif',
+            description: "This project focused on advanced shading techniques. First, I constructed the Tangent-Bitangent-Normal (TBN) coordinate system for each vertex to correctly apply normal maps, which simulate fine surface detail without adding geometry. For shadows, I implemented shadow mapping by rendering the scene from the light's perspective into a depth buffer. In the main render pass, fragment positions are transformed into the light's space to compare their depth against the shadow map, determining if they are in shadow. Soft shadows were achieved using Percentage-Closer Filtering (PCF)."
+        },
+        {
+            title: "Ray Tracing & Phong Shading",
+            mediaSrc: '/assets/img/phong.gif',
+            description: "Built a basic ray tracer that generates an image by casting primary rays from the camera through each pixel. The core of the engine is the ray-object intersection logic, using analytic methods for spheres and geometric tests for planes. Upon intersection, surface normals are calculated and used in the Phong illumination model, which combines ambient, diffuse, and specular lighting components to determine the final color. Specular reflections were implemented by recursively casting new rays from the intersection point."
+        }
+    ]
+};
+
+// NEW: Data for the Graphics Engine project page
+const graphicsEngineDetails = {
+    title: "From Scratch 3D Graphics Engine using C++",
+    githubUrl: "https://github.com/NicholasReardon133/RendererProject/tree/master",
+    sections: [
+        {
+            image: '/assets/img/engine2.png', // Replace with your first image
+            text: "This project was a comprehensive journey into the fundamentals of 3D graphics, built from the ground up in C++ using the DirectX 11 API. Following the excellent tutorial series by ChiliTomatoNoodle, I implemented a complete rendering pipeline, starting with the raw Win32 API for window creation and message handling. This foundational step provided a deep understanding of how a graphics application interfaces with the operating system before any rendering even begins. After that, it took implementing debug diagnostics, keyboard and mouse capture, Component Object Model (COM) programming, and shader construction to get our first triangle."
+        },
+        {
+            image: '/assets/img/engine3.png', // Replace with your tall second image
+            text: "At its core, the engine is a custom implementation of the DirectX 11 graphics pipeline. I implemented vertex shaders for transforming model vertices from local space to screen space and pixel shaders for applying lighting and textures. The engine supports loading and rendering 3D models, with a controllable 3D camera and a basic implementation of the Phong lighting model for realistic shading. This project was an invaluable exercise in understanding the low-level mechanics of 3D rendering that are often abstracted away by modern game engines."
+        }
+    ]
+};
 
 
 // --- Components ---
@@ -150,8 +173,6 @@ const Navigation = ({ setPage, page, isMobile }) => {
                 <nav className="flex space-x-2">
                     <NavItem icon={<Home size={24} />} label="Home" pageName="home" />
                     <NavItem icon={<FolderKanban size={24} />} label="Projects" pageName="projects" />
-                    <NavItem icon={<BookOpen size={24} />} label="School Projects" pageName="education" />
-                    <NavItem icon={<Code size={24} />} label="Simulation" pageName="simulation" />
                 </nav>
             </header>
         );
@@ -166,8 +187,6 @@ const Navigation = ({ setPage, page, isMobile }) => {
             <nav>
                 <NavItem icon={<Home size={20} />} label="Home" pageName="home" />
                 <NavItem icon={<FolderKanban size={20} />} label="Projects" pageName="projects" />
-                <NavItem icon={<BookOpen size={20} />} label="School Projects" pageName="education" />
-                <NavItem icon={<Code size={20} />} label="Simulation" pageName="simulation" />
             </nav>
             <div className="mt-auto text-center text-slate-500 text-xs">
                 <p>&copy; 2024 Nicholas Reardon</p>
@@ -235,16 +254,13 @@ const HomePage = () => {
     );
 };
 
-// CHANGE: This component now manages its own state for showing details
 const ProjectsPage = () => {
     const [selectedProject, setSelectedProject] = useState(null);
 
-    // If a project is selected, show its detail page
     if (selectedProject) {
         return <ProjectDetailPage projectId={selectedProject} onBack={() => setSelectedProject(null)} />;
     }
 
-    // Otherwise, show the grid of all projects
     return (
         <div className="animate-fade-in">
             <div className="text-center mb-12">
@@ -274,53 +290,62 @@ const ProjectsPage = () => {
 
 const ProjectDetailPage = ({ projectId, onBack }) => {
     const project = mainProjectsData.find(p => p.id === projectId);
+
+    const renderProjectContent = () => {
+        switch (projectId) {
+            case 'gateway-simulation':
+                return <SimulationPage isEmbedded={true} />;
+            case 'occlusion-culling':
+                return <OcclusionCullingProjectPage />;
+            case 'graphics-deep-dive':
+                return <ComputerGraphicsDeepDivePage />;
+            case 'graphics-engine':
+                return <GraphicsEngineProjectPage />;
+            default:
+                return (
+                     <div className="bg-white p-8 rounded-xl shadow-lg">
+                        <h1 className="text-4xl font-bold text-slate-800">{project.title}</h1>
+                        <p className="mt-4 text-lg text-slate-600">
+                            Content for this project will be added soon.
+                        </p>
+                    </div>
+                );
+        }
+    };
+
     return (
         <div className="animate-fade-in">
             <button onClick={onBack} className="flex items-center text-slate-600 hover:text-sky-600 font-semibold mb-8 transition-colors">
                 <ArrowLeft size={20} className="mr-2" />
                 Back to All Projects
             </button>
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-                <h1 className="text-4xl font-bold text-slate-800">{project.title}</h1>
-                <p className="mt-4 text-lg text-slate-600">
-                    Content for this project will be added soon.
-                </p>
-            </div>
+            {renderProjectContent()}
         </div>
     );
 };
 
-
-const EducationPage = () => {
+const OcclusionCullingProjectPage = () => {
     return (
-        <div className="animate-fade-in">
-            <h1 className="text-4xl font-bold text-slate-800 mb-2 text-center">University Projects</h1>
-            <p className="text-lg text-slate-600 mb-8 text-center">
-                Each of the following are computer graphics assignments I have worked on.
-            </p>
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+            <h1 className="text-4xl font-bold text-slate-800 text-center mb-8">{occlusionCullingDetails.title}</h1>
+            <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden mb-12 shadow-lg">
+                <iframe src={occlusionCullingDetails.youtubeSrc} title={occlusionCullingDetails.title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full"></iframe>
+            </div>
             
-            <div className="space-y-12">
-                {schoolProjects.map((project, index) => (
-                    <div key={index} className="bg-white p-8 rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row items-center gap-8">
-                        <div className="w-full lg:w-1/2">
-                            {project.mediaType === 'video' ? (
-                                <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
-                                    <iframe src={project.mediaSrc} title={project.title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full"></iframe>
-                                </div>
-                            ) : (
-                                <img src={project.mediaSrc} alt={project.title} className="w-full h-auto object-cover rounded-lg shadow-md" />
-                            )}
-                            {project.images && project.images.length > 0 && (
-                                <div className="grid grid-cols-3 gap-4 mt-4">
-                                    {project.images.map((img, i) => (
-                                        <img key={i} src={img} alt={`${project.title} screenshot ${i+1}`} className="object-contain rounded-md shadow-sm" />
-                                    ))}
-                                </div>
+            <div className="space-y-16">
+                {occlusionCullingDetails.sections.map((section, index) => (
+                    <div key={index} className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-8`}>
+                        <div className="w-full md:w-1/2">
+                            <p className="text-lg text-slate-600">{section.text}</p>
+                            {index === occlusionCullingDetails.sections.length - 1 && (
+                                 <a href={occlusionCullingDetails.githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center mt-6 px-6 py-3 bg-slate-800 text-white font-semibold rounded-lg shadow-md hover:bg-sky-600 transition-colors">
+                                    <Github size={20} className="mr-2" />
+                                    View on GitHub
+                                </a>
                             )}
                         </div>
-                        <div className="w-full lg:w-1/2">
-                            <h2 className="text-2xl font-bold text-slate-800 mb-3">{project.title}</h2>
-                            <p className="text-slate-600">{project.description}</p>
+                        <div className="w-full md:w-1/2">
+                            <img src={section.image} alt={`Occlusion Culling Detail ${index}`} className="rounded-lg shadow-md w-full object-cover" />
                         </div>
                     </div>
                 ))}
@@ -329,8 +354,68 @@ const EducationPage = () => {
     );
 };
 
+const ComputerGraphicsDeepDivePage = () => {
+    return (
+        <div className="animate-fade-in">
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+                <h1 className="text-4xl font-bold text-slate-800 mb-2 text-center">{deepDiveDetails.title}</h1>
+                <p className="text-lg text-slate-600 mb-12 text-center max-w-2xl mx-auto">
+                    A collection of foundational graphics techniques implemented from scratch in C++.
+                </p>
+                
+                <div className="space-y-16">
+                    {deepDiveDetails.topics.map((topic, index) => (
+                        <div key={index} className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-8`}>
+                            <div className="w-full lg:w-1/2">
+                                <img src={topic.mediaSrc} alt={topic.title} className="w-full h-auto object-cover rounded-lg shadow-md" />
+                            </div>
+                            <div className="w-full lg:w-1/2">
+                                <h2 className="text-2xl font-bold text-slate-800 mb-3">{topic.title}</h2>
+                                <p className="text-slate-600">{topic.description}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
 
-const SimulationPage = () => {
+                <div className="mt-12 text-center">
+                    <a href={deepDiveDetails.githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-8 py-4 bg-slate-800 text-white font-semibold rounded-lg shadow-md hover:bg-sky-600 transition-colors">
+                        <Github size={24} className="mr-3" />
+                        View All on GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const GraphicsEngineProjectPage = () => {
+    return (
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+            <h1 className="text-4xl font-bold text-slate-800 text-center mb-12">{graphicsEngineDetails.title}</h1>
+            <div className="space-y-16">
+                {graphicsEngineDetails.sections.map((section, index) => (
+                     <div key={index} className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-8`}>
+                        <div className="w-full md:w-1/2">
+                            <img src={section.image} alt={`Graphics Engine Detail ${index}`} className="rounded-lg shadow-md w-full h-full object-contain" />
+                        </div>
+                        <div className="w-full md:w-1/2">
+                            <p className="text-lg text-slate-600">{section.text}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+             <div className="mt-12 text-center">
+                <a href={graphicsEngineDetails.githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-8 py-4 bg-slate-800 text-white font-semibold rounded-lg shadow-md hover:bg-sky-600 transition-colors">
+                    <Github size={24} className="mr-3" />
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    );
+};
+
+
+const SimulationPage = ({ isEmbedded = false }) => {
     const mountRef = useRef(null);
     const sceneRef = useRef(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -542,6 +627,14 @@ const SimulationPage = () => {
                     <p>Z: {cameraPosition.z}</p>
                 </div>
             </div>
+             {isEmbedded && (
+                <div className="mt-8 text-center">
+                    <a href="https://github.com/NicholasReardon133/3D-Portfolio-Gateway" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-8 py-4 bg-slate-800 text-white font-semibold rounded-lg shadow-md hover:bg-sky-600 transition-colors">
+                        <Github size={24} className="mr-3" />
+                        View on GitHub
+                    </a>
+                </div>
+            )}
         </div>
     );
 };
@@ -588,10 +681,6 @@ export default function App() {
                 return <HomePage />;
             case 'projects':
                 return <ProjectsPage />;
-            case 'education':
-                return <EducationPage />;
-            case 'simulation':
-                return <SimulationPage />;
             default:
                 return <HomePage />;
         }
