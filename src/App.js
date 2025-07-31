@@ -188,9 +188,9 @@ const HomePage = () => {
                         const isLeft = isWork; 
 
                         const timelineRow = (
-                            // CHANGE: Increased vertical spacing with mb-16
-                            <div key={index} className={`mb-16 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
-                                {/* CHANGE: This div now contains the image */}
+                            // COMMENT: To adjust the spacing between timeline items, change the 'mb-24' (margin-bottom) class below.
+                            // Larger numbers (e.g., mb-32) increase the space, smaller numbers (e.g., mb-16) decrease it.
+                            <div key={index} className={`mb-32 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
                                 <div className="order-1 w-5/12 flex justify-center animate-fade-in-up" style={{ animationDelay: `${index * 0.15}s`}}>
                                     <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-48 h-48 object-cover" />
                                 </div>
