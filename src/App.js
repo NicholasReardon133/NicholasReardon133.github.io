@@ -2,64 +2,70 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Home, BookOpen, Code, Mail, Linkedin, Github, User, Briefcase, School } from 'lucide-react';
 
 // --- Helper Data ---
-// You can easily update your professional experience here
-const experienceData = [    
+const experienceData = [
     {
-    date: "2025 - Present",
-    title: "Master's in Business and Technology",
-    company: "Purdue University",
-    description: "",
-    icon: <School size={20} className="text-white" />,
-    type: 'education'
-  },
-    {
-    date: "Summer 2024",
-    title: "Software Engineer Intern",
-    company: "Peckish AI",
-    description: "Wrote APIs and fine-tuned AI models for object detection.",
-    icon: <Briefcase size={20} className="text-white" />,
-    type: 'work'
+        date: "2025 - Present",
+        title: "Master's in Business and Technology",
+        company: "Purdue University",
+        description: "",
+        icon: <School size={20} className="text-white" />,
+        type: 'education',
+        imageSrc: '/assets/img/mbt.jpg'
     },
     {
-    date: "Spring 2024",
-    title: "Undergraduate Researcher",
-    company: "Purdue University",
-    description: "Documented codebase and analyzed data.",
-    icon: <Briefcase size={20} className="text-white" />,
-    type: 'work'
+        date: "Summer 2024",
+        title: "Software Engineer Intern",
+        company: "Peckish AI",
+        description: "Wrote APIs and fine-tuned AI models for object detection.",
+        icon: <Briefcase size={20} className="text-white" />,
+        type: 'work',
+        imageSrc: '/assets/img/peckish.jpg'
     },
     {
-    date: "Fall 2023",
-    title: "Teaching Assistant",
-    company: "Purdue University",
-    description: "Led coding labs and mentored college freshman.",
-    icon: <Briefcase size={20} className="text-white" />,
-    type: 'work'
-  },
-  {
-    date: "Summer 2022",
-    title: "Software Engineer Intern",
-    company: "Netchex",
-    description: "Developed an automated internal communication tool.",
-    icon: <Briefcase size={20} className="text-white" />,
-    type: 'work'
-  },
-  {
-    date: "2021 - 2025",
-    title: "B.S. in Computer Science",
-    company: "Purdue University",
-    description: "Concentration in Computer Graphics and Visualization, Minor in Economics. <br /> GPA: 3.57",
-    icon: <School size={20} className="text-white" />,
-    type: 'education'
-  },
-  {
-    date: "Summer 2021",
-    title: "Quality Assurance Intern",
-    company: "Netchex",
-    description: "Tested software and wrote bug reports.",
-    icon: <Briefcase size={20} className="text-white" />,
-    type: 'work'
-  },
+        date: "Spring 2024",
+        title: "Undergraduate Researcher",
+        company: "Purdue University",
+        description: "Documented codebase and analyzed data.",
+        icon: <Briefcase size={20} className="text-white" />,
+        type: 'work',
+        imageSrc: '/assets/img/research.png'
+    },
+    {
+        date: "Fall 2023",
+        title: "Teaching Assistant",
+        company: "Purdue University",
+        description: "Led coding labs and mentored college freshman.",
+        icon: <Briefcase size={20} className="text-white" />,
+        type: 'work',
+        imageSrc: '/assets/img/ta.png'
+    },
+    {
+        date: "Summer 2022",
+        title: "Software Engineer Intern",
+        company: "Netchex",
+        description: "Developed an automated internal communication tool.",
+        icon: <Briefcase size={20} className="text-white" />,
+        type: 'work',
+        imageSrc: '/assets/img/netchexSwe.png'
+    },
+    {
+        date: "2021 - 2025",
+        title: "B.S. in Computer Science",
+        company: "Purdue University",
+        description: "Concentration in Computer Graphics and Visualization, Minor in Economics. <br /> GPA: 3.57",
+        icon: <School size={20} className="text-white" />,
+        type: 'education',
+        imageSrc: '/assets/img/compsci.png'
+    },
+    {
+        date: "Summer 2021",
+        title: "Quality Assurance Intern",
+        company: "Netchex",
+        description: "Tested software and wrote bug reports.",
+        icon: <Briefcase size={20} className="text-white" />,
+        type: 'work',
+        imageSrc: '/assets/img/qa.png'
+    },
 ];
 
 // You can update your project data here
@@ -152,14 +158,6 @@ const Navigation = ({ setPage, page, isMobile }) => {
 };
 
 const HomePage = () => {
-    // Sort experiences chronologically, assuming dates can be parsed or compared.
-    // A more robust solution would use full dates, but for this structure, we reverse to get newest first.
-    const sortedExperience = [...experienceData].sort((a, b) => {
-        const yearA = parseInt(a.date.split(' ')[1] || a.date);
-        const yearB = parseInt(b.date.split(' ')[1] || b.date);
-        return yearB - yearA;
-    });
-
     return (
         <div className="animate-fade-in">
             {/* Bio Section */}
@@ -179,30 +177,30 @@ const HomePage = () => {
                 </div>
             </div>
 
-            {/* NEW Timeline Section */}
+            {/* Timeline Section */}
             <div className="container mx-auto px-4">
                 <h2 className="text-3xl font-bold text-slate-800 mb-12 text-center">My Journey</h2>
                 <div className="relative wrap overflow-hidden p-10 h-full">
-                    {/* The central timeline bar */}
                     <div className="absolute h-full border border-slate-700 border-2-2 bg-slate-700" style={{left: '50%'}}></div>
 
-                    {sortedExperience.map((item, index) => {
+                    {experienceData.map((item, index) => {
                         const isWork = item.type === 'work';
-                        const isLeft = isWork; // Work on the left, Education on the right
+                        const isLeft = isWork; 
 
-                        // Container for a single timeline event (a full row)
                         const timelineRow = (
-                            <div key={index} className={`mb-8 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
-                                <div className="order-1 w-5/12"></div> {/* Empty space on one side */}
+                            // CHANGE: Increased vertical spacing with mb-16
+                            <div key={index} className={`mb-16 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
+                                {/* CHANGE: This div now contains the image */}
+                                <div className="order-1 w-5/12 flex justify-center animate-fade-in-up" style={{ animationDelay: `${index * 0.15}s`}}>
+                                    <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-48 h-48 object-cover" />
+                                </div>
                                 
-                                {/* The circular icon on the timeline */}
                                 <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-12 h-12 rounded-full`}>
                                     <div className="mx-auto text-white">
                                         {item.icon}
                                     </div>
                                 </div>
                                 
-                                {/* The content card */}
                                 <div
                                     className="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 animate-fade-in-up"
                                     style={{ animationDelay: `${index * 0.15}s`}}
