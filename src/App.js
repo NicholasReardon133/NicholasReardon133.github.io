@@ -192,7 +192,7 @@ const HomePage = () => {
                             // Larger numbers (e.g., mb-32) increase the space, smaller numbers (e.g., mb-16) decrease it.
                             <div key={index} className={`mb-32 flex justify-between items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}>
                                 <div className="order-1 w-5/12 flex justify-center animate-fade-in-up" style={{ animationDelay: `${index * 0.15}s`}}>
-                                    <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-48 h-48 object-cover" />
+                                    <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-64 h-64 object-cover" />
                                 </div>
                                 
                                 <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-12 h-12 rounded-full`}>
@@ -203,7 +203,7 @@ const HomePage = () => {
                                 
                                 <div
                                     className="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4 animate-fade-in-up"
-                                    style={{ animationDelay: `${index * 0.15}s`}}
+                                    style={{ animationDelay: `${index * 0.50}s`}}
                                 >
                                     <time className={`mb-1 text-sm font-semibold leading-none ${isWork ? 'text-sky-600' : 'text-emerald-600'}`}>{item.date}</time>
                                     <h3 className="mb-2 font-bold text-slate-800 text-lg">{item.title}</h3>
