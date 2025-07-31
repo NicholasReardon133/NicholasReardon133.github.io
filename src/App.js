@@ -8,7 +8,7 @@ const experienceData = [
         title: "Master's in Business and Technology",
         company: "Purdue University",
         description: "",
-        icon: <School size={20} className="text-white" />,
+        icon: <School size={28} className="text-white" />,
         type: 'education',
         imageSrc: '/assets/img/mbt.jpg'
     },
@@ -17,7 +17,7 @@ const experienceData = [
         title: "Software Engineer Intern",
         company: "Peckish AI",
         description: "Wrote APIs and fine-tuned AI models for object detection.",
-        icon: <Briefcase size={20} className="text-white" />,
+        icon: <Briefcase size={28} className="text-white" />,
         type: 'work',
         imageSrc: '/assets/img/peckish.jpg'
     },
@@ -26,7 +26,7 @@ const experienceData = [
         title: "Undergraduate Researcher",
         company: "Purdue University",
         description: "Documented codebase and analyzed data.",
-        icon: <Briefcase size={20} className="text-white" />,
+        icon: <Briefcase size={28} className="text-white" />,
         type: 'work',
         imageSrc: '/assets/img/research.png'
     },
@@ -35,7 +35,7 @@ const experienceData = [
         title: "Teaching Assistant",
         company: "Purdue University",
         description: "Led coding labs and mentored college freshman.",
-        icon: <Briefcase size={20} className="text-white" />,
+        icon: <Briefcase size={28} className="text-white" />,
         type: 'work',
         imageSrc: '/assets/img/ta.png'
     },
@@ -44,7 +44,7 @@ const experienceData = [
         title: "Software Engineer Intern",
         company: "Netchex",
         description: "Developed an automated internal communication tool.",
-        icon: <Briefcase size={20} className="text-white" />,
+        icon: <Briefcase size={28} className="text-white" />,
         type: 'work',
         imageSrc: '/assets/img/netchexSwe.png'
     },
@@ -52,8 +52,8 @@ const experienceData = [
         date: "2021 - 2025",
         title: "B.S. in Computer Science",
         company: "Purdue University",
-        description: "Concentration in Computer Graphics and Visualization, Minor in Economics. <br /> GPA: 3.57",
-        icon: <School size={20} className="text-white" />,
+        description: "Concentration in Computer Graphics and Visualization, Minor in Economics. <br /><br /> GPA: 3.57",
+        icon: <School size={28} className="text-white" />,
         type: 'education',
         imageSrc: '/assets/img/compsci.png'
     },
@@ -62,7 +62,7 @@ const experienceData = [
         title: "Quality Assurance Intern",
         company: "Netchex",
         description: "Tested software and wrote bug reports.",
-        icon: <Briefcase size={20} className="text-white" />,
+        icon: <Briefcase size={28} className="text-white" />,
         type: 'work',
         imageSrc: '/assets/img/qa.png'
     },
@@ -179,8 +179,8 @@ const HomePage = () => {
 
             {/* Timeline Section */}
             <div className="container mx-auto px-4">
-                <h2 className="text-3xl font-bold text-slate-800 mb-12 text-center">My Journey</h2>
-                <div className="relative wrap overflow-hidden p-10 h-full">
+                <h2 className="text-5xl font-bold text-slate-800 mt-36 mb-36 text-center">My Journey</h2>
+                <div className="relative wrap overflow-hidden p-10 h-full mb-24">
                     <div className="absolute h-full border border-slate-700 border-2-2 bg-slate-700" style={{left: '50%'}}></div>
 
                     {experienceData.map((item, index) => {
@@ -195,7 +195,7 @@ const HomePage = () => {
                                     <img src={item.imageSrc} alt={item.title} className="rounded-lg shadow-xl w-64 h-64 object-cover" />
                                 </div>
                                 
-                                <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-24 h-24 rounded-full`}>
+                                <div className={`z-20 flex items-center order-1 ${isWork ? 'bg-sky-500' : 'bg-emerald-500'} shadow-xl w-16 h-16 rounded-full`}>
                                     <div className="mx-auto text-white">
                                         {item.icon}
                                     </div>
