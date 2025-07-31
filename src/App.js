@@ -94,7 +94,7 @@ const mainProjectsData = [
 const occlusionCullingDetails = {
     title: "Real-Time Occlusion Culling in Unity",
     youtubeSrc: "https://www.youtube.com/embed/8F179_CA1AI",
-    githubUrl: "https://github.com/NicholasReardon133/Occlusion-Culling",
+    githubUrl: "https://github.com/NicholasReardon133/OcclusionCullingUnity",
     sections: [
         {
             text: "In this project, I created an occlusion culling script that utilized raycasting to selectively render visible objects. I created all of the building models in Blender, as well as the testing environment in Unity. The first step is to set up Frustum Culling, which involves testing if the buildings' bounding boxes are within the field of view of the camera.",
@@ -113,7 +113,7 @@ const occlusionCullingDetails = {
 
 const deepDiveDetails = {
     title: "Computer Graphics Deep Dive",
-    githubUrl: "https://github.com/NicholasReardon133/Boilerplate-Graphics-Code",
+    githubUrl: "https://github.com/NicholasReardon133/CS334",
     topics: [
         {
             title: "Procedural Modeling & L-Systems",
