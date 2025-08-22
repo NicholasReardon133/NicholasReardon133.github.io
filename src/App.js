@@ -632,10 +632,7 @@ const SimulationPage = ({ isEmbedded = false }) => {
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                      <div>
                         <h1 className="text-4xl font-bold text-slate-800 mb-2">Interactive 3D Simulation</h1>
-                        <p className="text-lg text-slate-600">
-                            This stands as a miniature representation of my Data Mine Project with Barrios Technology!
-                            Click and drag to rotate the model, or use the dropdown to change the scene.
-                        </p>
+                        <p className="text-lg text-slate-600">This stands as a miniature representation of my Data Mine Project with Barrios Technology! Click and drag to rotate the model, or use the dropdown to change the scene.</p>
                     </div>
                     <div className="flex-shrink-0">
                         <label htmlFor="bg-select" className="block text-lg font-bold text-slate-800 mb-1">Background</label>
