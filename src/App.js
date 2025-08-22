@@ -633,6 +633,7 @@ const SimulationPage = ({ isEmbedded = false }) => {
                      <div>
                         <h1 className="text-4xl font-bold text-slate-800 mb-2">Interactive 3D Simulation</h1>
                         <p className="text-lg text-slate-600">
+                            This stands as a miniature representation of my Data Mine Project with Barrios Technology!
                             Click and drag to rotate the model, or use the dropdown to change the scene.
                         </p>
                     </div>
